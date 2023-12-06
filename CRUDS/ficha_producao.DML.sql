@@ -1,88 +1,86 @@
-CREATE OR REPLACE PROCEDURE sp_ficha_producao_create(
-    IN p_quantidade_equipamentos INT,
-    IN p_descricao TEXT,
-    IN p_horas INT,
-    IN p_detalhe_id INT,
-    IN p_utilizador_id INT,
-    IN p_tipo_mao_obra_id INT,
-    IN p_equipamento_id INT
+-- Create
+
+CREATE OR REPLACE FUNCTION criar_ficha_producao(
+    quantidade_equipamentos INT,
+    descricao TEXT,
+    horas INT,
+    detalhe_id INT,
+    utilizador_id INT,
+    tipo_mao_obra_id INT,
+    equipamento_id INT
 )
-LANGUAGE SQL
-AS $$
-INSERT INTO ficha_producao (
-    quantidade_equipamentos,
-    descricao,
-    horas,
-    detalhe_id,
-    utilizador_id,
-    tipo_mao_obra_id,
-    equipamento_id
-) VALUES (
-    p_quantidade_equipamentos,
-    p_descricao,
-    p_horas,
-    p_detalhe_id,
-    p_utilizador_id,
-    p_tipo_mao_obra_id,
-    p_equipamento_id
-) RETURNING *;
-$$;
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO ficha_producao(
+        quantidade_equipamentos,
+        descricao,
+        horas,
+        detalhe_id,
+        utilizador_id,
+        tipo_mao_obra_id,
+        equipamento_id
+    ) VALUES (
+        quantidade_equipamentos,
+        descricao,
+        horas,
+        detalhe_id,
+        utilizador_id,
+        tipo_mao_obra_id,
+        equipamento_id
+    );
+END;
+$$ LANGUAGE plpgsql;
 
-
-
-
-
-
-CREATE OR REPLACE PROCEDURE sp_ficha_producao_update(
-    IN p_id INT,
-    IN p_quantidade_equipamentos INT,
-    IN p_descricao TEXT,
-    IN p_horas INT,
-    IN p_detalhe_id INT,
-    IN p_utilizador_id INT,
-    IN p_tipo_mao_obra_id INT,
-    IN p_equipamento_id INT
+--Update
+CREATE OR REPLACE FUNCTION atualizar_ficha_producao(
+    ficha_id INT,
+    quantidade_equipamentos INT,
+    descricao TEXT,
+    horas INT,
+    detalhe_id INT,
+    utilizador_id INT,
+    tipo_mao_obra_id INT,
+    equipamento_id INT
 )
-LANGUAGE SQL
-AS $$
-UPDATE ficha_producao
-SET
-    quantidade_equipamentos = p_quantidade_equipamentos,
-    descricao = p_descricao,
-    horas = p_horas,
-    detalhe_id = p_detalhe_id,
-    utilizador_id = p_utilizador_id,
-    tipo_mao_obra_id = p_tipo_mao_obra_id,
-    equipamento_id = p_equipamento_id
-WHERE id = p_id
-RETURNING *;
-$$;
+RETURNS VOID AS $$
+BEGIN
+    UPDATE ficha_producao
+    SET
+        quantidade_equipamentos = quantidade_equipamentos,
+        descricao = descricao,
+        horas = horas,
+        detalhe_id = detalhe_id,
+        utilizador_id = utilizador_id,
+        tipo_mao_obra_id = tipo_mao_obra_id,
+        equipamento_id = equipamento_id
+    WHERE id = ficha_id;
+END;
+$$ LANGUAGE plpgsql;
+
+--Delete
+CREATE OR REPLACE FUNCTION excluir_ficha_producao(ficha_id INT)
+RETURNS VOID AS $$
+BEGIN
+    DELETE FROM ficha_producao WHERE id = ficha_id;
+END;
+$$ LANGUAGE plpgsql;
 
 
+--Read
+CREATE OR REPLACE FUNCTION obter_todas_fichas_producao()
+RETURNS SETOF ficha_producao AS $$
+BEGIN
+    RETURN QUERY SELECT * FROM ficha_producao;
+END;
+$$ LANGUAGE plpgsql;
 
-
-
-
-CREATE OR REPLACE PROCEDURE sp_ficha_producao_delete(IN p_id INT)
-LANGUAGE SQL
-AS $$
-DELETE FROM ficha_producao WHERE id = p_id;
-$$;
-
-
-
-
-
-CREATE OR REPLACE PROCEDURE sp_ficha_producao_readOne(IN p_id INT)
-LANGUAGE SQL
-AS $$
-SELECT * FROM ficha_producao WHERE id = p_id;
-$$;
-
-
-
-
-
-
-CREATE OR REPLACE VIEW vw_ficha_producao_read AS
-SELECT * FROM ficha_producao;
+--Read One
+CREATE OR REPLACE FUNCTION obter_ficha_producao_por_id(ficha_id INT)
+RETURNS ficha_producao AS $$
+DECLARE
+    ficha ficha_producao;
+BEGIN
+    SELECT * INTO ficha FROM ficha_producao WHERE id = ficha_id;
+    RETURN ficha;
+END;
+$$ LANGUAGE plpgsql;
