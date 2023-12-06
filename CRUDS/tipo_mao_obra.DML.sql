@@ -1,62 +1,71 @@
-CREATE OR REPLACE FUNCTION sp_tipo_mao_obra_create(
-    p_tipo VARCHAR(100),
-    p_custo MONEY
-) RETURNS VOID AS $$
+--delete
+CREATE OR REPLACE PROCEDURE sp_delete_tipo_mao_obra(IN p_id INT)
+AS
+$$
 BEGIN
-    INSERT INTO tipo_mao_obra(tipo, custo) VALUES (p_tipo, p_custo);
+    DELETE FROM tipo_mao_obra WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$
+LANGUAGE plpgsql;
 
 
+--create
+CREATE OR REPLACE PROCEDURE sp_create_tipo_mao_obra(
+    IN p_tipo VARCHAR(100),
+    IN p_custo MONEY
+)
+AS
+$$
+BEGIN
+    INSERT INTO tipo_mao_obra (tipo, custo) VALUES (p_tipo, p_custo);
+END;
+$$
+LANGUAGE plpgsql;
 
-
-
-CREATE OR REPLACE FUNCTION sp_tipo_mao_obra_update(
-    p_id INT,
-    p_tipo VARCHAR(100),
-    p_custo MONEY
-) RETURNS VOID AS $$
+--update
+CREATE OR REPLACE PROCEDURE sp_update_tipo_mao_obra(
+    IN p_id INT,
+    IN p_tipo VARCHAR(100),
+    IN p_custo MONEY
+)
+AS
+$$
 BEGIN
     UPDATE tipo_mao_obra
     SET tipo = p_tipo, custo = p_custo
     WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$
+LANGUAGE plpgsql;
 
-
-
-
-
-
-CREATE OR REPLACE FUNCTION sp_tipo_mao_obra_delete(
-    p_id INT
-) RETURNS VOID AS $$
+--read
+CREATE OR REPLACE FUNCTION fn_read_tipo_mao_obra()
+RETURNS TABLE (
+    out_id INT,
+    out_data_criacao TIMESTAMP,
+    out_tipo VARCHAR(100),
+    out_custo MONEY
+)
+AS
+$$
 BEGIN
-    DELETE FROM tipo_mao_obra WHERE id = p_id;
+    RETURN QUERY SELECT * FROM tipo_mao_obra;
 END;
-$$ LANGUAGE plpgsql;
+$$
+LANGUAGE plpgsql;
 
-
-
-
-
-
-CREATE OR REPLACE VIEW vw_tipo_mao_obra_read AS
-SELECT * FROM tipo_mao_obra;
-
-
-
-
-
-CREATE OR REPLACE FUNCTION sp_tipo_mao_obra_readOne(
-    p_id INT
-) RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    tipo VARCHAR(100),
-    custo MONEY
-) AS $$
+--read one 
+CREATE OR REPLACE FUNCTION fn_readone_tipo_mao_obra(IN p_id INT)
+RETURNS TABLE (
+    out_id INT,
+    out_data_criacao TIMESTAMP,
+    out_tipo VARCHAR(100),
+    out_custo MONEY
+)
+AS
+$$
 BEGIN
     RETURN QUERY SELECT * FROM tipo_mao_obra WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$
+LANGUAGE plpgsql;

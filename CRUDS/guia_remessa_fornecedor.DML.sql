@@ -1,14 +1,15 @@
-CREATE OR REPLACE PROCEDURE sp_guia_remessa_fornecedor_create(
-    -- parâmetros da tabela
-    IN data_envio TIMESTAMP,
-    IN data_entrega_prevista TIMESTAMP,
-    IN endereco_origem VARCHAR(300),
-    IN endereco_chegada VARCHAR(300),
-    IN estado_id INT,
-    IN detalhe_encomenda_id INT,
-    IN fatura_id INT,
-    IN utilizador_id INT
+--create
+
+CREATE OR REPLACE PROCEDURE sp_create_guia_remessa_fornecedor(
+    IN p_data_envio TIMESTAMPTZ,
+    IN p_data_entrega_prevista TIMESTAMPTZ,
+    IN p_endereco_origem VARCHAR(300),
+    IN p_endereco_chegada VARCHAR(300),
+    IN p_estado_id INT,
+    IN p_detalhe_encomenda_id INT,
+    IN p_utilizador_id INT
 )
+LANGUAGE plpgsql
 AS $$
 BEGIN
     INSERT INTO guia_remessa_fornecedor (
@@ -18,77 +19,95 @@ BEGIN
         endereco_chegada,
         estado_id,
         detalhe_encomenda_id,
-        fatura_id,
         utilizador_id
-    )
-    VALUES (
-        data_envio,
-        data_entrega_prevista,
-        endereco_origem,
-        endereco_chegada,
-        estado_id,
-        detalhe_encomenda_id,
-        fatura_id,
-        utilizador_id
+    ) VALUES (
+        p_data_envio,
+        p_data_entrega_prevista,
+        p_endereco_origem,
+        p_endereco_chegada,
+        p_estado_id,
+        p_detalhe_encomenda_id,
+        p_utilizador_id
     );
 END;
-$$
-LANGUAGE plpgsql;
+$$;
 
-
-
-
-
-CREATE OR REPLACE PROCEDURE sp_guia_remessa_fornecedor_update(
-    IN guia_remessa_id INT,
-    IN data_recebida TIMESTAMP
+--Update 
+CREATE OR REPLACE PROCEDURE sp_update_guia_remessa_fornecedor(
+    IN p_id INT,
+    IN p_data_envio TIMESTAMPTZ,
+    IN p_data_entrega_prevista TIMESTAMPTZ,
+    IN p_endereco_origem VARCHAR(300),
+    IN p_endereco_chegada VARCHAR(300),
+    IN p_estado_id INT,
+    IN p_detalhe_encomenda_id INT,
+    IN p_utilizador_id INT
 )
+LANGUAGE plpgsql
 AS $$
 BEGIN
     UPDATE guia_remessa_fornecedor
-    SET data_recebida = data_recebida
-    WHERE id = guia_remessa_id;
+    SET
+        data_envio = p_data_envio,
+        data_entrega_prevista = p_data_entrega_prevista,
+        endereco_origem = p_endereco_origem,
+        endereco_chegada = p_endereco_chegada,
+        estado_id = p_estado_id,
+        detalhe_encomenda_id = p_detalhe_encomenda_id,
+        utilizador_id = p_utilizador_id
+    WHERE id = p_id;
 END;
-$$
-LANGUAGE plpgsql;
+$$;
 
+--delete 
+CREATE OR REPLACE PROCEDURE sp_delete_guia_remessa_fornecedor(IN p_id INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    DELETE FROM guia_remessa_fornecedor WHERE id = p_id;
+END;
+$$;
 
-
-
-
-CREATE OR REPLACE PROCEDURE sp_guia_remessa_fornecedor_delete(
-    IN guia_remessa_id INT
+--read
+CREATE OR REPLACE FUNCTION fn_read_guia_remessa_fornecedor()
+RETURNS TABLE (
+    id INT,
+    data_criacao TIMESTAMPTZ,
+    data_envio TIMESTAMPTZ,
+    data_entrega_prevista TIMESTAMPTZ,
+    data_recebida TIMESTAMPTZ,
+    endereco_origem VARCHAR(300),
+    endereco_chegada VARCHAR(300),
+    estado_id INT,
+    detalhe_encomenda_id INT,
+    utilizador_id INT
 )
 AS $$
 BEGIN
-    DELETE FROM guia_remessa_fornecedor
-    WHERE id = guia_remessa_id;
+    RETURN QUERY SELECT * FROM guia_remessa_fornecedor;
 END;
 $$
 LANGUAGE plpgsql;
 
 
-
-
-
-CREATE OR REPLACE VIEW vw_guia_remessa_fornecedor_read AS
-SELECT * FROM guia_remessa_fornecedor;
-
-
-
-
-
-CREATE OR REPLACE PROCEDURE sp_guia_remessa_fornecedor_readOne(
-    IN guia_remessa_id INT
+--read one
+CREATE OR REPLACE FUNCTION fn_readone_guia_remessa_fornecedor(p_id INT)
+RETURNS TABLE (
+    id INT,
+    data_criacao TIMESTAMPTZ,
+    data_envio TIMESTAMPTZ,
+    data_entrega_prevista TIMESTAMPTZ,
+    data_recebida TIMESTAMPTZ,
+    endereco_origem VARCHAR(300),
+    endereco_chegada VARCHAR(300),
+    estado_id INT,
+    detalhe_encomenda_id INT,
+    utilizador_id INT
 )
 AS $$
 BEGIN
-    SELECT * FROM guia_remessa_fornecedor
-    WHERE id = guia_remessa_id;
+    RETURN QUERY SELECT * FROM guia_remessa_fornecedor WHERE id = p_id;
 END;
 $$
 LANGUAGE plpgsql;
-
-
-
 

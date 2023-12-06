@@ -1,4 +1,14 @@
-CREATE OR REPLACE PROCEDURE sp_utilizador_create(
+--delete
+CREATE OR REPLACE PROCEDURE sp_delete_utilizador(p_id INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    DELETE FROM utilizador WHERE id = p_id;
+END;
+$$;
+
+--insert
+CREATE OR REPLACE PROCEDURE sp_create_utilizador(
     p_email VARCHAR(500),
     p_senha VARCHAR(400),
     p_nome VARCHAR(300),
@@ -13,10 +23,8 @@ BEGIN
 END;
 $$;
 
-
-
-
-CREATE OR REPLACE PROCEDURE sp_utilizador_update(
+--update
+CREATE OR REPLACE PROCEDURE sp_update_utilizador(
     p_id INT,
     p_email VARCHAR(500),
     p_senha VARCHAR(400),
@@ -28,8 +36,7 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
     UPDATE utilizador
-    SET
-        email = p_email,
+    SET email = p_email,
         senha = p_senha,
         nome = p_nome,
         sobrenome = p_sobrenome,
@@ -38,34 +45,38 @@ BEGIN
 END;
 $$;
 
-
-
-
-CREATE OR REPLACE PROCEDURE sp_utilizador_delete(
-    p_id INT
+--read
+CREATE OR REPLACE FUNCTION fn_read_utilizador()
+RETURNS TABLE (
+    id INT,
+    data_criacao TIMESTAMP,
+    email VARCHAR(500),
+    senha VARCHAR(400),
+    nome VARCHAR(300),
+    sobrenome VARCHAR(300),
+    perfil_id INT
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    DELETE FROM utilizador WHERE id = p_id;
+    RETURN QUERY SELECT * FROM utilizador;
 END;
 $$;
 
-
-
-
-CREATE OR REPLACE VIEW vw_utilizador_read AS
-SELECT * FROM utilizador;
-
-
-
-
-CREATE OR REPLACE PROCEDURE sp_utilizador_readOne(
-    p_id INT
+--read one
+CREATE OR REPLACE FUNCTION fn_readone_utilizador(p_id INT)
+RETURNS TABLE (
+    id INT,
+    data_criacao TIMESTAMP,
+    email VARCHAR(500),
+    senha VARCHAR(400),
+    nome VARCHAR(300),
+    sobrenome VARCHAR(300),
+    perfil_id INT
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    SELECT * FROM utilizador WHERE id = p_id;
+    RETURN QUERY SELECT * FROM utilizador WHERE id = p_id;
 END;
 $$;

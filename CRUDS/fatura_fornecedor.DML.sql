@@ -1,59 +1,57 @@
-
-CREATE OR REPLACE FUNCTION sp_fatura_fornecedor_create(
-    descricao_param TEXT
-) RETURNS INT AS $$
-DECLARE
-    new_id INT;
+-- Procedimento Armazenado para DELETE
+CREATE OR REPLACE PROCEDURE delete_fatura_fornecedor(IN p_id INT)
+LANGUAGE plpgsql
+AS $$
 BEGIN
-    INSERT INTO fatura_fornecedor (descricao)
-    VALUES (descricao_param)
-    RETURNING id INTO new_id;
-    
-    RETURN new_id;
+  DELETE FROM fatura_fornecedor WHERE id = p_id;
+END;
+$$;
+
+-- Procedimento Armazenado para CREATE
+CREATE OR REPLACE PROCEDURE create_fatura_fornecedor(
+  IN p_descricao TEXT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  INSERT INTO fatura_fornecedor (descricao) VALUES (p_descricao);
+END;
+$$;
+
+-- Procedimento Armazenado para UPDATE
+CREATE OR REPLACE PROCEDURE update_fatura_fornecedor(
+  IN p_id INT,
+  IN p_descricao TEXT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  UPDATE fatura_fornecedor SET descricao = p_descricao WHERE id = p_id;
+END;
+$$;
+
+-- Função para READ
+CREATE OR REPLACE FUNCTION read_fatura_fornecedor()
+RETURNS TABLE (
+  id INT,
+  data_criacao TIMESTAMP,
+  descricao TEXT
+)
+AS $$
+BEGIN
+  RETURN QUERY SELECT * FROM fatura_fornecedor;
 END;
 $$ LANGUAGE plpgsql;
 
----------------------------------------------------------------------------------
-
-CREATE OR REPLACE FUNCTION sp_fatura_fornecedor_update(
-    fatura_id INT,
-    nova_descricao TEXT
-) RETURNS VOID AS $$
+-- Função para READOne com base no ID
+CREATE OR REPLACE FUNCTION read_one_fatura_fornecedor(IN p_id INT)
+RETURNS TABLE (
+  id INT,
+  data_criacao TIMESTAMP,
+  descricao TEXT
+)
+AS $$
 BEGIN
-    UPDATE fatura_fornecedor
-    SET descricao = nova_descricao
-    WHERE id = fatura_id;
-END;
-$$ LANGUAGE plpgsql;
-
---------------------------------------------------------------------------------
-
-CREATE OR REPLACE FUNCTION sp_fatura_fornecedor_delete(
-    fatura_id INT
-) RETURNS VOID AS $$
-BEGIN
-    DELETE FROM fatura_fornecedor
-    WHERE id = fatura_id;
-END;
-$$ LANGUAGE plpgsql;
-
-------------------------------------------------------------------------------------
-
-CREATE OR REPLACE VIEW vw_fatura_fornecedor_read AS
-SELECT * FROM fatura_fornecedor;
-
--------------------------------------------------------------------------------
-
-CREATE OR REPLACE FUNCTION sp_fatura_fornecedor_readOne(
-    fatura_id INT
-) RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    descricao TEXT
-) AS $$
-BEGIN
-    RETURN QUERY SELECT id, data_criacao, descricao
-    FROM fatura_fornecedor
-    WHERE id = fatura_id;
+  RETURN QUERY SELECT * FROM fatura_fornecedor WHERE id = p_id;
 END;
 $$ LANGUAGE plpgsql;
