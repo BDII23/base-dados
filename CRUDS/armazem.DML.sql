@@ -1,66 +1,42 @@
-CREATE OR REPLACE PROCEDURE sp_armazem_create(
-    p_endereco VARCHAR(100)
-)
-AS
-$$
+CREATE OR REPLACE FUNCTION sp_create_armazem(p_endereco VARCHAR(100))
+RETURNS VOID AS $$
 BEGIN
-    INSERT INTO armazem (endereco)
-    VALUES (p_endereco);
+    INSERT INTO armazem (endereco) VALUES (p_endereco);
 END;
-$$
-LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 
 
-
-
-CREATE OR REPLACE PROCEDURE sp_armazem_update(
-    p_id INT,
-    p_endereco VARCHAR(100)
-)
-AS
-$$
+CREATE OR REPLACE FUNCTION sp_update_armazem(p_id INT, p_endereco VARCHAR(100))
+RETURNS VOID AS $$
 BEGIN
-    UPDATE armazem
-    SET endereco = p_endereco
-    WHERE id = p_id;
+    UPDATE armazem SET endereco = p_endereco WHERE id = p_id;
 END;
-$$
-LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 
 
-
-
-CREATE OR REPLACE PROCEDURE sp_armazem_delete(
-    p_id INT
-)
-AS
-$$
+CREATE OR REPLACE FUNCTION sp_delete_armazem(p_id INT)
+RETURNS VOID AS $$
 BEGIN
     DELETE FROM armazem WHERE id = p_id;
 END;
-$$
-LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
 
 
-
-
-CREATE OR REPLACE VIEW vw_armazem_read AS
-SELECT * FROM armazem;
-
-
-
-
-
-CREATE OR REPLACE PROCEDURE sp_armazem_readOne(
-    p_id INT
-)
-AS
-$$
+CREATE OR REPLACE FUNCTION fn_read_armazem()
+RETURNS SETOF armazem AS $$
 BEGIN
-    SELECT * FROM armazem WHERE id = p_id;
+    RETURN QUERY SELECT * FROM armazem;
 END;
-$$
-LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION fn_readone_armazem(p_id INT)
+RETURNS SETOF armazem AS $$
+BEGIN
+    RETURN QUERY SELECT * FROM armazem WHERE id = p_id;
+END;
+$$ LANGUAGE plpgsql;

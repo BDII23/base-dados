@@ -1,24 +1,23 @@
-
-CREATE OR REPLACE FUNCTION sp_fatura_fornecedor_create(
+-- Procedure para criar uma nova fatura de fornecedor
+CREATE OR REPLACE PROCEDURE sp_fatura_fornecedor_create(
     descricao_param TEXT
-) RETURNS INT AS $$
+)
+AS $$
 DECLARE
     new_id INT;
 BEGIN
     INSERT INTO fatura_fornecedor (descricao)
     VALUES (descricao_param)
     RETURNING id INTO new_id;
-    
-    RETURN new_id;
 END;
 $$ LANGUAGE plpgsql;
 
----------------------------------------------------------------------------------
-
-CREATE OR REPLACE FUNCTION sp_fatura_fornecedor_update(
+-- Procedure para atualizar uma fatura de fornecedor existente
+CREATE OR REPLACE PROCEDURE sp_fatura_fornecedor_update(
     fatura_id INT,
     nova_descricao TEXT
-) RETURNS VOID AS $$
+)
+AS $$
 BEGIN
     UPDATE fatura_fornecedor
     SET descricao = nova_descricao
@@ -26,31 +25,26 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
---------------------------------------------------------------------------------
-
-CREATE OR REPLACE FUNCTION sp_fatura_fornecedor_delete(
+-- Procedure para excluir uma fatura de fornecedor
+CREATE OR REPLACE PROCEDURE sp_fatura_fornecedor_delete(
     fatura_id INT
-) RETURNS VOID AS $$
+)
+AS $$
 BEGIN
     DELETE FROM fatura_fornecedor
     WHERE id = fatura_id;
 END;
 $$ LANGUAGE plpgsql;
 
-------------------------------------------------------------------------------------
-
+-- View para ler todas as faturas de fornecedor
 CREATE OR REPLACE VIEW vw_fatura_fornecedor_read AS
 SELECT * FROM fatura_fornecedor;
 
--------------------------------------------------------------------------------
-
-CREATE OR REPLACE FUNCTION sp_fatura_fornecedor_readOne(
+-- Procedure para ler uma fatura de fornecedor específica
+CREATE OR REPLACE PROCEDURE sp_fatura_fornecedor_readOne(
     fatura_id INT
-) RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    descricao TEXT
-) AS $$
+)
+AS $$
 BEGIN
     RETURN QUERY SELECT id, data_criacao, descricao
     FROM fatura_fornecedor

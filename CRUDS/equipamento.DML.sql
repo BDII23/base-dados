@@ -1,56 +1,59 @@
-CREATE OR REPLACE PROCEDURE sp_equipamento_create(
-    p_descricao TEXT,
-    p_tipo_id INT
-)
-AS $$
+CREATE OR REPLACE FUNCTION sp_delete_equipamento(in_id INT)
+RETURNS VOID AS $$
 BEGIN
-    INSERT INTO equipamento (descricao, tipo_id) VALUES (p_descricao, p_tipo_id);
+  DELETE FROM equipamento WHERE id = in_id;
 END;
 $$ LANGUAGE plpgsql;
 
 
 
-
-CREATE OR REPLACE PROCEDURE sp_equipamento_update(
-    p_id INT,
-    p_descricao TEXT,
-    p_tipo_id INT
+CREATE OR REPLACE FUNCTION sp_create_equipamento(
+    in_descricao TEXT,
+    in_tipo_id INT
 )
-AS $$
+RETURNS VOID AS $$
 BEGIN
-    UPDATE equipamento
-    SET descricao = p_descricao, tipo_id = p_tipo_id
-    WHERE id = p_id;
+  INSERT INTO equipamento (descricao, tipo_id) VALUES (in_descricao, in_tipo_id);
 END;
 $$ LANGUAGE plpgsql;
 
 
 
-
-CREATE OR REPLACE PROCEDURE sp_equipamento_delete(
-    p_id INT
+CREATE OR REPLACE FUNCTION sp_update_equipamento(
+    in_id INT,
+    in_descricao TEXT,
+    in_tipo_id INT
 )
-AS $$
+RETURNS VOID AS $$
 BEGIN
-    DELETE FROM equipamento WHERE id = p_id;
+  UPDATE equipamento SET descricao = in_descricao, tipo_id = in_tipo_id WHERE id = in_id;
 END;
 $$ LANGUAGE plpgsql;
 
 
 
-
-CREATE OR REPLACE VIEW vw_equipamento_read AS
-SELECT * FROM equipamento;
-
-
-
-
-
-CREATE OR REPLACE PROCEDURE sp_equipamento_readOne(
-    p_id INT
-)
-AS $$
+CREATE OR REPLACE FUNCTION fn_read_equipamento()
+RETURNS TABLE (
+    id INT,
+    data_criacao TIMESTAMP,
+    descricao TEXT,
+    tipo_id INT
+) AS $$
 BEGIN
-    SELECT * FROM equipamento WHERE id = p_id;
+  RETURN QUERY SELECT * FROM equipamento;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION fn_readone_equipamento(in_id INT)
+RETURNS TABLE (
+    id INT,
+    data_criacao TIMESTAMP,
+    descricao TEXT,
+    tipo_id INT
+) AS $$
+BEGIN
+  RETURN QUERY SELECT * FROM equipamento WHERE id = in_id;
 END;
 $$ LANGUAGE plpgsql;

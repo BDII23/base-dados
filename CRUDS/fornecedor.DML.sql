@@ -16,7 +16,7 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE PROCEDURE sp_fornecedor_update(
-    p_id SERIAL,
+    p_id INT,
     p_nome VARCHAR(100),
     p_nif CHAR(9),
     p_email VARCHAR(200),
@@ -36,7 +36,7 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE PROCEDURE sp_fornecedor_delete(
-    p_id SERIAL
+    p_id INT
 )
 AS
 $$
@@ -53,7 +53,7 @@ CREATE OR REPLACE VIEW vw_fornecedor_read AS
 
 
 CREATE OR REPLACE PROCEDURE sp_fornecedor_readOne(
-    p_id SERIAL
+    p_id INT
 )
 AS
 $$

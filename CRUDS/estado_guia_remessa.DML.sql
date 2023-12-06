@@ -1,56 +1,51 @@
-CREATE OR REPLACE FUNCTION sp_estado_guia_remessa_create(
-    p_estado VARCHAR(100)
-) RETURNS VOID AS $$
+CREATE OR REPLACE PROCEDURE sp_delete_estado_guia_remessa(IN p_id INT)
+LANGUAGE plpgsql
+AS $$
 BEGIN
-    INSERT INTO estado_guia_remessa (estado) VALUES (p_estado);
+  DELETE FROM estado_guia_remessa WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 
-CREATE OR REPLACE FUNCTION sp_estado_guia_remessa_update(
-    p_id INT,
-    p_estado VARCHAR(100)
-) RETURNS VOID AS $$
+CREATE OR REPLACE PROCEDURE sp_create_estado_guia_remessa(IN p_estado VARCHAR(100))
+LANGUAGE plpgsql
+AS $$
 BEGIN
-    UPDATE estado_guia_remessa
-    SET estado = p_estado
-    WHERE id = p_id;
+  INSERT INTO estado_guia_remessa(estado) VALUES (p_estado);
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 
-
-CREATE OR REPLACE FUNCTION sp_estado_guia_remessa_delete(
-    p_id INT
-) RETURNS VOID AS $$
+CREATE OR REPLACE PROCEDURE sp_update_estado_guia_remessa(IN p_id INT, IN p_estado VARCHAR(100))
+LANGUAGE plpgsql
+AS $$
 BEGIN
-    DELETE FROM estado_guia_remessa
-    WHERE id = p_id;
+  UPDATE estado_guia_remessa SET estado = p_estado WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 
-
-CREATE OR REPLACE VIEW vw_estado_guia_remessa_read AS
-    SELECT id, data_criacao, estado
-    FROM estado_guia_remessa;
-
-
-
-
-CREATE OR REPLACE FUNCTION sp_estado_guia_remessa_readOne(
-    p_id INT
-) RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    estado VARCHAR(100)
-) AS $$
+CREATE OR REPLACE FUNCTION fn_read_estado_guia_remessa()
+RETURNS SETOF estado_guia_remessa
+AS
+$$
 BEGIN
-    RETURN QUERY SELECT id, data_criacao, estado
-                 FROM estado_guia_remessa
-                 WHERE id = p_id;
+    RETURN QUERY SELECT * FROM estado_guia_remessa;
 END;
-$$ LANGUAGE plpgsql;
+$$
+LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION fn_readone_estado_guia_remessa(IN p_id INT)
+RETURNS SETOF estado_guia_remessa
+AS
+$$
+BEGIN
+    RETURN QUERY SELECT * FROM estado_guia_remessa WHERE id = p_id;
+END;
+$$
+LANGUAGE plpgsql;

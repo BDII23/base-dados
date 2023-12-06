@@ -1,37 +1,6 @@
-CREATE OR REPLACE PROCEDURE sp_encomenda_cliente_create(
-    p_data_criacao TIMESTAMP,
-    p_estado_id INT,
-    p_cliente_id INT
-)
-AS $$
-BEGIN
-    INSERT INTO encomenda_cliente (data_criacao, estado_id, cliente_id)
-    VALUES (p_data_criacao, p_estado_id, p_cliente_id);
-END;
-$$ LANGUAGE plpgsql;
-
-
-
-CREATE OR REPLACE PROCEDURE sp_encomenda_cliente_update(
-    p_id INT,
-    p_data_criacao TIMESTAMP,
-    p_estado_id INT,
-    p_cliente_id INT
-)
-AS $$
-BEGIN
-    UPDATE encomenda_cliente
-    SET data_criacao = p_data_criacao, estado_id = p_estado_id, cliente_id = p_cliente_id
-    WHERE id = p_id;
-END;
-$$ LANGUAGE plpgsql;
-
-
-
-CREATE OR REPLACE PROCEDURE sp_encomenda_cliente_delete(
-    p_id INT
-)
-AS $$
+CREATE OR REPLACE FUNCTION sp_delete_encomenda_cliente(p_id INT)
+RETURNS VOID AS
+$$
 BEGIN
     DELETE FROM encomenda_cliente WHERE id = p_id;
 END;
@@ -39,29 +8,69 @@ $$ LANGUAGE plpgsql;
 
 
 
-
-CREATE OR REPLACE VIEW vw_encomenda_cliente_read AS
-SELECT
-    id,
-    data_criacao,
-    estado_id,
-    cliente_id
-FROM encomenda_cliente;
-
-
-
-
-CREATE OR REPLACE PROCEDURE sp_encomenda_cliente_readOne(
-    p_id INT
-)
-AS $$
+CREATE OR REPLACE FUNCTION sp_create_encomenda_cliente(
+    p_data_criacao TIMESTAMP,
+    p_estado_id INT,
+    p_cliente_id INT,
+    p_fatura_id INT)
+RETURNS VOID AS
+$$
 BEGIN
-    SELECT
-        id,
-        data_criacao,
-        estado_id,
-        cliente_id
-    FROM encomenda_cliente
+    INSERT INTO encomenda_cliente (data_criacao, estado_id, cliente_id, fatura_id)
+    VALUES (p_data_criacao, p_estado_id, p_cliente_id, p_fatura_id);
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION sp_update_encomenda_cliente(
+    p_id INT,
+    p_data_criacao TIMESTAMP,
+    p_estado_id INT,
+    p_cliente_id INT,
+    p_fatura_id INT)
+RETURNS VOID AS
+$$
+BEGIN
+    UPDATE encomenda_cliente
+    SET 
+        data_criacao = p_data_criacao,
+        estado_id = p_estado_id,
+        estado_algumacoisa_id = p_estado_id,
+        cliente_id = p_cliente_id,
+        fatura_id = p_fatura_id
     WHERE id = p_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION fn_read_encomenda_cliente()
+RETURNS TABLE (
+    id INT,
+    data_criacao TIMESTAMP,
+    estado_id INT,
+    cliente_id INT,
+    fatura_id INT
+) AS
+$$
+BEGIN
+    RETURN QUERY SELECT * FROM encomenda_cliente;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION fn_readOne_encomenda_cliente(p_id INT)
+RETURNS TABLE (
+    id INT,
+    data_criacao TIMESTAMP,
+    estado_id INT,
+    cliente_id INT,
+    fatura_id INT
+) AS
+$$
+BEGIN
+    RETURN QUERY SELECT * FROM encomenda_cliente WHERE id = p_id;
 END;
 $$ LANGUAGE plpgsql;

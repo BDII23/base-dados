@@ -1,64 +1,72 @@
--- Procedimento Armazenado: sp_detalhe_encomenda_cliente_create
-CREATE OR REPLACE PROCEDURE sp_detalhe_encomenda_cliente_create(
-    IN p_quantidade INT,
-    IN p_custo MONEY,
-    IN p_equipamento_id INT,
-    IN p_encomenda_id INT
-)
-LANGUAGE plpgsql
-AS $$
+CREATE OR REPLACE FUNCTION sp_delete_detalhe_encomenda_cliente(_id INT)
+RETURNS VOID AS $$
 BEGIN
-    INSERT INTO detalhe_encomenda_cliente (quantidade, custo, equipamento_id, encomenda_id)
-    VALUES (p_quantidade, p_custo, p_equipamento_id, p_encomenda_id);
+    DELETE FROM detalhe_encomenda_cliente WHERE id = _id;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
--- Procedimento Armazenado: sp_detalhe_encomenda_cliente_update
-CREATE OR REPLACE PROCEDURE sp_detalhe_encomenda_cliente_update(
-    IN p_id INT,
-    IN p_quantidade INT,
-    IN p_custo MONEY,
-    IN p_equipamento_id INT,
-    IN p_encomenda_id INT
-)
-LANGUAGE plpgsql
-AS $$
+
+
+CREATE OR REPLACE FUNCTION sp_create_detalhe_encomenda_cliente(
+    _quantidade INT,
+    _custo_unidade MONEY,
+    _equipamento_id INT,
+    _encomenda_id INT)
+RETURNS VOID AS $$
+BEGIN
+    INSERT INTO detalhe_encomenda_cliente (quantidade, custo_unidade, equipamento_id, encomenda_id)
+    VALUES (_quantidade, _custo_unidade, _equipamento_id, _encomenda_id);
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION sp_update_detalhe_encomenda_cliente(
+    _id INT,
+    _quantidade INT,
+    _custo_unidade MONEY,
+    _equipamento_id INT,
+    _encomenda_id INT)
+RETURNS VOID AS $$
 BEGIN
     UPDATE detalhe_encomenda_cliente
-    SET quantidade = p_quantidade,
-        custo = p_custo,
-        equipamento_id = p_equipamento_id,
-        encomenda_id = p_encomenda_id
-    WHERE id = p_id;
+    SET 
+        quantidade = _quantidade,
+        custo_unidade = _custo_unidade,
+        equipamento_id = _equipamento_id,
+        encomenda_id = _encomenda_id
+    WHERE id = _id;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
--- Procedimento Armazenado: sp_detalhe_encomenda_cliente_delete
-CREATE OR REPLACE PROCEDURE sp_detalhe_encomenda_cliente_delete(
-    IN p_id INT
-)
-LANGUAGE plpgsql
-AS $$
+
+
+CREATE OR REPLACE FUNCTION fn_read_detalhe_encomenda_cliente()
+RETURNS TABLE (
+    id INT,
+    data_criacao TIMESTAMP,
+    quantidade INT,
+    custo_unidade MONEY,
+    equipamento_id INT,
+    encomenda_id INT
+) AS $$
 BEGIN
-    DELETE FROM detalhe_encomenda_cliente WHERE id = p_id;
+    RETURN QUERY SELECT * FROM detalhe_encomenda_cliente;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
--- View: vw_detalhe_encomenda_cliente_read
-CREATE OR REPLACE VIEW vw_detalhe_encomenda_cliente_read AS
-SELECT * FROM detalhe_encomenda_cliente;
 
--- Procedimento Armazenado: sp_detalhe_encomenda_cliente_readOne
-CREATE OR REPLACE PROCEDURE sp_detalhe_encomenda_cliente_readOne(
-    IN p_id INT
-)
-LANGUAGE plpgsql
-AS $$
+
+CREATE OR REPLACE FUNCTION fn_readone_detalhe_encomenda_cliente(_id INT)
+RETURNS TABLE (
+    id INT,
+    data_criacao TIMESTAMP,
+    quantidade INT,
+    custo_unidade MONEY,
+    equipamento_id INT,
+    encomenda_id INT
+) AS $$
 BEGIN
-    SELECT * FROM detalhe_encomenda_cliente WHERE id = p_id;
+    RETURN QUERY SELECT * FROM detalhe_encomenda_cliente WHERE id = _id;
 END;
-$$;
-
-
-
-
+$$ LANGUAGE plpgsql;
