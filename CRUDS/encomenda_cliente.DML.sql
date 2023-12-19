@@ -16,6 +16,23 @@ CREATE OR REPLACE FUNCTION sp_create_encomenda_cliente(
 RETURNS VOID AS
 $$
 BEGIN
+
+    IF p_data_criacao IS NULL THEN
+        RAISE EXCEPTION 'A data de criação da encomenda do cliente não pode ser nula.';
+    END IF;
+
+    IF p_estado_id IS NULL OR p_estado_id < 0 THEN
+        RAISE EXCEPTION 'O estado ID da encomenda do cliente não pode ser um valor nulo ou negativo.';
+    END IF;
+
+    IF p_cliente_id IS NULL OR p_cliente_id < 0 THEN
+        RAISE EXCEPTION 'O cliente ID da encomenda do cliente não pode ser um valor nulo ou negativo.';
+    END IF;
+
+    IF p_fatura_id IS NOT NULL AND p_fatura_id < 0 THEN
+        RAISE EXCEPTION 'O fatura ID da encomenda do cliente não pode ser negativo.';
+    END IF;
+
     INSERT INTO encomenda_cliente (data_criacao, estado_id, cliente_id, fatura_id)
     VALUES (p_data_criacao, p_estado_id, p_cliente_id, p_fatura_id);
 END;

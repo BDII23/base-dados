@@ -1,6 +1,9 @@
 CREATE OR REPLACE FUNCTION sp_create_armazem(p_endereco VARCHAR(100))
 RETURNS VOID AS $$
 BEGIN
+    IF p_endereco IS NULL OR p_endereco = '' THEN
+        RAISE EXCEPTION 'O endereço não pode ser nulo ou vazio.';
+    END IF;
     INSERT INTO armazem (endereco) VALUES (p_endereco);
 END;
 $$ LANGUAGE plpgsql;

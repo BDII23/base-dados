@@ -11,6 +11,35 @@ CREATE OR REPLACE FUNCTION criar_ficha_producao(
 )
 RETURNS VOID AS $$
 BEGIN
+
+    IF quantidade_equipamentos < 0 THEN
+        RAISE EXCEPTION 'A quantidade de equipamentos não pode ser negativo';
+    END IF;
+
+    IF  descricao is null or descricao = '' THEN
+        RAISE EXCEPTION 'A descricao de equipamentos não pode ser negativa ou nula';
+    END IF;
+
+    IF horas < 0 THEN
+        RAISE EXCEPTION 'O numero de horas não pode ser negativo';
+    END IF;
+
+    IF detalhe_id < 0 THEN
+        RAISE EXCEPTION 'O detalhe ID não pode ser negativo';
+    END IF;
+
+    IF utilizador_id < 0 THEN
+        RAISE EXCEPTION 'O utilizador ID não pode ser negativo';
+    END IF;
+
+    IF tipo_mao_obra_id < 0 THEN
+        RAISE EXCEPTION 'O tipo de mão de obra ID não pode ser negativo';
+    END IF;
+
+    IF equipamento_id < 0 THEN
+        RAISE EXCEPTION 'O equipamento ID não pode ser negativo';
+    END IF;
+
     INSERT INTO ficha_producao(
         quantidade_equipamentos,
         descricao,

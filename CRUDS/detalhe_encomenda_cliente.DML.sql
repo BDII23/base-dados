@@ -14,6 +14,23 @@ CREATE OR REPLACE FUNCTION sp_create_detalhe_encomenda_cliente(
     _encomenda_id INT)
 RETURNS VOID AS $$
 BEGIN
+    
+    IF _quantidade <= 0 THEN
+        RAISE EXCEPTION 'A quantidade deve ser maior que zero.';
+    END IF;
+
+    IF _custo_unidade < 0 THEN
+        RAISE EXCEPTION 'O custo por unidade não pode ser negativo.';
+    END IF;
+
+    IF _equipamento_id IS NULL THEN
+        RAISE EXCEPTION 'O equipamento_id não pode ser nulo.';
+    END IF;
+
+    IF _encomenda_id IS NULL THEN
+        RAISE EXCEPTION 'O encomenda_id não pode ser nulo.';
+    END IF;
+
     INSERT INTO detalhe_encomenda_cliente (quantidade, custo_unidade, equipamento_id, encomenda_id)
     VALUES (_quantidade, _custo_unidade, _equipamento_id, _encomenda_id);
 END;

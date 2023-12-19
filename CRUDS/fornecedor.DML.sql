@@ -8,6 +8,27 @@ CREATE OR REPLACE PROCEDURE create_fornecedor(
 )
 AS $$
 BEGIN
+
+    IF p_nome IS NULL OR p_nome = '' THEN
+        RAISE EXCEPTION 'O nome do fornecedor não pode ser nulo ou vazio.';
+    END IF;
+
+    IF p_nif IS NULL OR LENGTH(p_nif) <> 9 OR NOT p_nif ~ '^\d+$' THEN
+        RAISE EXCEPTION 'O NIF do fornecedor deve ter 9 caracteres e conter apenas dígitos.';
+    END IF;
+
+    IF p_email IS NULL OR p_email = '' THEN
+        RAISE EXCEPTION 'O email do fornecedor não pode ser nulo ou vazio.';
+    END IF;
+
+    IF p_telefone IS NULL OR LENGTH(p_telefone) <> 9 OR NOT p_telefone ~ '^\d+$' THEN
+        RAISE EXCEPTION 'O telefone do fornecedor deve ter 9 caracteres e conter apenas dígitos.';
+    END IF;
+
+    IF p_endereco IS NULL OR p_endereco = '' THEN
+        RAISE EXCEPTION 'O endereço do fornecedor não pode ser nulo ou vazio.';
+    END IF;
+    
     INSERT INTO fornecedor (nome, nif, email, telefone, endereco)
     VALUES (p_nome, p_nif, p_email, p_telefone, p_endereco);
 END;

@@ -16,6 +16,19 @@ CREATE OR REPLACE PROCEDURE sp_create_encomenda_fornecedor(
 )
 AS $$
 BEGIN
+
+    IF in_estado_id IS NULL OR in_estado_id < 0 THEN
+        RAISE EXCEPTION 'O estado ID da encomenda do fornecedor não pode ser nulo ou negativo.';
+    END IF;
+
+    IF in_fornecedor_id IS NULL OR in_fornecedor_id < 0 THEN
+        RAISE EXCEPTION 'O fornecedor ID da encomenda do fornecedor não pode ser nulo ou negativo.';
+    END IF;
+
+    IF in_fatura_id < 0 THEN
+        RAISE EXCEPTION 'A fatura ID da encomenda do fornecedor não pode ser negativo.';
+    END IF;
+
     INSERT INTO encomenda_fornecedor (estado_id, fornecedor_id, fatura_id)
     VALUES (in_estado_id, in_fornecedor_id, in_fatura_id);
 END;

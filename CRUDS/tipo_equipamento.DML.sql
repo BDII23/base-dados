@@ -3,6 +3,11 @@ CREATE OR REPLACE PROCEDURE sp_create_tipo_equipamento(p_tipo VARCHAR(150))
 LANGUAGE plpgsql
 AS $$
 BEGIN
+
+    IF p_tipo IS NULL OR p_tipo = '' THEN
+        RAISE EXCEPTION 'O tipo não pode ser nulo ou vazio.';
+    END IF;
+
     INSERT INTO tipo_equipamento (tipo) VALUES (p_tipo);
 END;
 $$;

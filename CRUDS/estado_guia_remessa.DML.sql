@@ -12,6 +12,11 @@ CREATE OR REPLACE PROCEDURE sp_create_estado_guia_remessa(IN p_estado VARCHAR(10
 LANGUAGE plpgsql
 AS $$
 BEGIN
+
+  IF p_estado IS NULL OR p_estado = '' THEN
+        RAISE EXCEPTION 'O estado não pode ser nulo ou vazio.';
+    END IF;
+    
   INSERT INTO estado_guia_remessa(estado) VALUES (p_estado);
 END;
 $$;

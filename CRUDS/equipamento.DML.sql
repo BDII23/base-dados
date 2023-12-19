@@ -13,6 +13,15 @@ CREATE OR REPLACE FUNCTION sp_create_equipamento(
 )
 RETURNS VOID AS $$
 BEGIN
+    IF in_descricao is null or in_descricao = '' THEN
+      RAISE EXCEPTION 'A descrição do equipamento não pode ser nula ou vazia.';
+    END IF;
+
+    IF in_tipo_id is null or in_tipo_id < 0 THEN
+      RAISE EXCEPTION 'O tipo ID do equipamento não pode ser negativo ou vazio.';
+    END IF;
+
+
   INSERT INTO equipamento (descricao, tipo_id) VALUES (in_descricao, in_tipo_id);
 END;
 $$ LANGUAGE plpgsql;
