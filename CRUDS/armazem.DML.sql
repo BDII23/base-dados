@@ -36,7 +36,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-
 CREATE OR REPLACE FUNCTION fn_readone_armazem(p_id INT)
 RETURNS SETOF armazem AS $$
 BEGIN
