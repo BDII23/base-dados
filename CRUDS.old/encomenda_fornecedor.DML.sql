@@ -11,8 +11,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE PROCEDURE sp_create_encomenda_fornecedor(
     in_estado_id INT,
-    in_fornecedor_id INT,
-    in_fatura_id INT
+    in_fornecedor_id INT
 )
 AS $$
 BEGIN
@@ -26,8 +25,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE PROCEDURE sp_update_encomenda_fornecedor(
     in_id INT,
     in_estado_id INT,
-    in_fornecedor_id INT,
-    in_fatura_id INT
+    in_fornecedor_id INT
 )
 AS $$
 BEGIN
@@ -46,8 +44,7 @@ RETURNS TABLE (
     out_id INT,
     out_data_criacao TIMESTAMP,
     out_estado_id INT,
-    out_fornecedor_id INT,
-    out_fatura_id INT
+    out_fornecedor_id INT
 )
 AS $$
 BEGIN
@@ -62,8 +59,7 @@ RETURNS TABLE (
     out_id INT,
     out_data_criacao TIMESTAMP,
     out_estado_id INT,
-    out_fornecedor_id INT,
-    out_fatura_id INT
+    out_fornecedor_id INT
 )
 AS $$
 BEGIN

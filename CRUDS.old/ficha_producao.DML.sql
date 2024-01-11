@@ -4,7 +4,6 @@ CREATE OR REPLACE FUNCTION criar_ficha_producao(
     quantidade_equipamentos INT,
     descricao TEXT,
     horas INT,
-    detalhe_id INT,
     utilizador_id INT,
     tipo_mao_obra_id INT,
     equipamento_id INT
@@ -15,7 +14,6 @@ BEGIN
         quantidade_equipamentos,
         descricao,
         horas,
-        detalhe_id,
         utilizador_id,
         tipo_mao_obra_id,
         equipamento_id
@@ -23,7 +21,6 @@ BEGIN
         quantidade_equipamentos,
         descricao,
         horas,
-        detalhe_id,
         utilizador_id,
         tipo_mao_obra_id,
         equipamento_id
@@ -37,7 +34,6 @@ CREATE OR REPLACE FUNCTION atualizar_ficha_producao(
     quantidade_equipamentos INT,
     descricao TEXT,
     horas INT,
-    detalhe_id INT,
     utilizador_id INT,
     tipo_mao_obra_id INT,
     equipamento_id INT
@@ -49,7 +45,6 @@ BEGIN
         quantidade_equipamentos = quantidade_equipamentos,
         descricao = descricao,
         horas = horas,
-        detalhe_id = detalhe_id,
         utilizador_id = utilizador_id,
         tipo_mao_obra_id = tipo_mao_obra_id,
         equipamento_id = equipamento_id

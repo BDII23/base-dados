@@ -2,7 +2,7 @@
 
 CREATE OR REPLACE PROCEDURE sp_create_guia_remessa_fornecedor(
     IN p_data_envio TIMESTAMPTZ,
-    IN p_data_entrega_prevista TIMESTAMPTZ,
+    IN p_data_entrega TIMESTAMPTZ,
     IN p_endereco_origem VARCHAR(300),
     IN p_endereco_chegada VARCHAR(300),
     IN p_estado_id INT,
@@ -14,7 +14,7 @@ AS $$
 BEGIN
     INSERT INTO guia_remessa_fornecedor (
         data_envio,
-        data_entrega_prevista,
+        data_entrega,
         endereco_origem,
         endereco_chegada,
         estado_id,
@@ -22,7 +22,7 @@ BEGIN
         utilizador_id
     ) VALUES (
         p_data_envio,
-        p_data_entrega_prevista,
+        p_data_entrega,
         p_endereco_origem,
         p_endereco_chegada,
         p_estado_id,
@@ -36,7 +36,7 @@ $$;
 CREATE OR REPLACE PROCEDURE sp_update_guia_remessa_fornecedor(
     IN p_id INT,
     IN p_data_envio TIMESTAMPTZ,
-    IN p_data_entrega_prevista TIMESTAMPTZ,
+    IN p_data_entrega TIMESTAMPTZ,
     IN p_endereco_origem VARCHAR(300),
     IN p_endereco_chegada VARCHAR(300),
     IN p_estado_id INT,
@@ -49,7 +49,7 @@ BEGIN
     UPDATE guia_remessa_fornecedor
     SET
         data_envio = p_data_envio,
-        data_entrega_prevista = p_data_entrega_prevista,
+        data_entrega = p_data_entrega,
         endereco_origem = p_endereco_origem,
         endereco_chegada = p_endereco_chegada,
         estado_id = p_estado_id,
@@ -74,7 +74,7 @@ RETURNS TABLE (
     id INT,
     data_criacao TIMESTAMPTZ,
     data_envio TIMESTAMPTZ,
-    data_entrega_prevista TIMESTAMPTZ,
+    data_entrega TIMESTAMPTZ,
     data_recebida TIMESTAMPTZ,
     endereco_origem VARCHAR(300),
     endereco_chegada VARCHAR(300),
@@ -96,7 +96,7 @@ RETURNS TABLE (
     id INT,
     data_criacao TIMESTAMPTZ,
     data_envio TIMESTAMPTZ,
-    data_entrega_prevista TIMESTAMPTZ,
+    data_entrega TIMESTAMPTZ,
     data_recebida TIMESTAMPTZ,
     endereco_origem VARCHAR(300),
     endereco_chegada VARCHAR(300),

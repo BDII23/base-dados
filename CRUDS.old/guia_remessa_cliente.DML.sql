@@ -2,7 +2,7 @@
 
 CREATE OR REPLACE PROCEDURE sp_create_guia_remessa_cliente(
     p_data_envio TIMESTAMP,
-    p_data_entrega_prevista TIMESTAMP,
+    p_data_entrega TIMESTAMP,
     p_endereco_origem VARCHAR(300),
     p_endereco_chegada VARCHAR(300),
     p_estado_id INT,
@@ -13,7 +13,7 @@ AS $$
 BEGIN
     INSERT INTO guia_remessa_cliente (
         data_envio,
-        data_entrega_prevista,
+        data_entrega,
         endereco_origem,
         endereco_chegada,
         estado_id,
@@ -21,7 +21,7 @@ BEGIN
         utilizador_id
     ) VALUES (
         p_data_envio,
-        p_data_entrega_prevista,
+        p_data_entrega,
         p_endereco_origem,
         p_endereco_chegada,
         p_estado_id,
@@ -35,7 +35,7 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE PROCEDURE sp_update_guia_remessa_cliente(
     p_id INT,
     p_data_envio TIMESTAMP,
-    p_data_entrega_prevista TIMESTAMP,
+    p_data_entrega TIMESTAMP,
     p_endereco_origem VARCHAR(300),
     p_endereco_chegada VARCHAR(300),
     p_estado_id INT,
@@ -47,7 +47,7 @@ BEGIN
     UPDATE guia_remessa_cliente
     SET
         data_envio = p_data_envio,
-        data_entrega_prevista = p_data_entrega_prevista,
+        data_entrega = p_data_entrega,
         endereco_origem = p_endereco_origem,
         endereco_chegada = p_endereco_chegada,
         estado_id = p_estado_id,
