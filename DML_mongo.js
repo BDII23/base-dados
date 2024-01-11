@@ -18,10 +18,10 @@ db.createCollection("equipamento_producao", {
    },
 });
 
-db.suaColecao.insertMany([
+db.equipamento_producao.insertMany([
    {
       id: 1,
-      equipamento_id: 123,
+      equipamento_producao_id: 123,
       detalhes: {
          chave1: "valor1",
          chave2: "valor2",
@@ -29,7 +29,7 @@ db.suaColecao.insertMany([
    },
    {
       id: 2,
-      equipamento_id: 456,
+      equipamento_producao_id: 456,
       detalhes: {
          chave1: "valor3",
          chave2: "valor4",
@@ -37,7 +37,7 @@ db.suaColecao.insertMany([
    },
    {
       id: 3,
-      equipamento_id: 789,
+      equipamento_producao_id: 789,
       detalhes: {
          chave1: "valor5",
          chave2: "valor6",

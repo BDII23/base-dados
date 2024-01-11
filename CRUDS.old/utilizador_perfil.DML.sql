@@ -4,6 +4,11 @@ CREATE OR REPLACE PROCEDURE sp_create_utilizador_perfil(
 )
 AS $$
 BEGIN
+
+    IF p_perfil IS NULL OR p_perfil = '' THEN
+        RAISE EXCEPTION 'O perfil não pode ser nulo ou vazio.';
+    END IF;
+
     INSERT INTO utilizador_perfil (perfil) VALUES (p_perfil);
 END;
 $$ LANGUAGE plpgsql;

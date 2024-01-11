@@ -17,6 +17,16 @@ CREATE OR REPLACE PROCEDURE sp_create_tipo_mao_obra(
 AS
 $$
 BEGIN
+
+    IF p_tipo IS NULL OR p_tipo = '' THEN
+        RAISE EXCEPTION 'O tipo não pode ser nulo ou vazio.';
+    END IF;
+
+   
+    IF p_custo < 0 THEN
+        RAISE EXCEPTION 'O custo não pode ser negativo.';
+    END IF;
+
     INSERT INTO tipo_mao_obra (tipo, custo) VALUES (p_tipo, p_custo);
 END;
 $$

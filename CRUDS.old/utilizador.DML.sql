@@ -18,6 +18,27 @@ CREATE OR REPLACE PROCEDURE sp_create_utilizador(
 LANGUAGE plpgsql
 AS $$
 BEGIN
+
+    IF p_email IS NULL OR p_email = '' THEN
+        RAISE EXCEPTION 'O e-mail não pode ser nulo ou vazio.';
+    END IF;
+
+    IF p_senha IS NULL OR p_senha = '' THEN
+        RAISE EXCEPTION 'A senha não pode ser nula ou vazia.';
+    END IF;
+
+    IF p_nome IS NULL OR p_nome = '' THEN
+        RAISE EXCEPTION 'O nome não pode ser nulo ou vazio.';
+    END IF;
+
+    IF p_sobrenome IS NULL OR p_sobrenome = '' THEN
+        RAISE EXCEPTION 'O sobrenome não pode ser nulo ou vazio.';
+    END IF;
+
+    IF p_perfil_id IS NULL THEN
+        RAISE EXCEPTION 'O perfil_id não pode ser nulo.';
+    END IF;
+
     INSERT INTO utilizador (email, senha, nome, sobrenome, perfil_id)
     VALUES (p_email, p_senha, p_nome, p_sobrenome, p_perfil_id);
 END;

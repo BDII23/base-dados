@@ -15,6 +15,13 @@ CREATE OR REPLACE PROCEDURE sp_create_estado_encomenda(
 LANGUAGE plpgsql
 AS $$
 BEGIN
+    IF p_data_criacao IS NULL THEN
+        RAISE EXCEPTION 'A data de criação não pode ser nula.';
+    END IF;
+
+    IF p_estado IS NULL OR p_estado = '' THEN
+        RAISE EXCEPTION 'O estado não pode ser nulo ou vazio.';
+    END IF;
     INSERT INTO estado_encomenda (data_criacao, estado) VALUES (p_data_criacao, p_estado);
 END;
 $$;

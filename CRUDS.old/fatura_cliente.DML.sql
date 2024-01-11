@@ -14,6 +14,11 @@ CREATE OR REPLACE PROCEDURE sp_create_fatura_cliente(
 LANGUAGE plpgsql
 AS $$
 BEGIN
+
+    IF p_descricao IS NULL OR p_descricao = '' THEN
+        RAISE EXCEPTION 'A descrição não pode ser nula ou vazia.';
+    END IF;
+    
     INSERT INTO fatura_cliente (descricao) VALUES (p_descricao);
 END;
 $$;
