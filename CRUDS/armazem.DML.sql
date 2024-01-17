@@ -1,16 +1,13 @@
-CREATE OR REPLACE FUNCTION sp_create_armazem(p_endereco VARCHAR(100))
+CREATE OR REPLACE FUNCTION screate_armazem(p_endereco VARCHAR(100))
 RETURNS VOID AS $$
 BEGIN
-    IF p_endereco IS NULL OR p_endereco = '' THEN
-        RAISE EXCEPTION 'O endereço não pode ser nulo ou vazio.';
-    END IF;
     INSERT INTO armazem (endereco) VALUES (p_endereco);
 END;
 $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION sp_update_armazem(p_id INT, p_endereco VARCHAR(100))
+CREATE OR REPLACE FUNCTION update_armazem(p_id INT, p_endereco VARCHAR(100))
 RETURNS VOID AS $$
 BEGIN
     UPDATE armazem SET endereco = p_endereco WHERE id = p_id;
@@ -19,7 +16,7 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION sp_delete_armazem(p_id INT)
+CREATE OR REPLACE FUNCTION delete_armazem(p_id INT)
 RETURNS VOID AS $$
 BEGIN
     DELETE FROM armazem WHERE id = p_id;
@@ -28,7 +25,7 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fn_read_armazem()
+CREATE OR REPLACE FUNCTION read_armazem()
 RETURNS SETOF armazem AS $$
 BEGIN
     RETURN QUERY SELECT * FROM armazem;
@@ -36,7 +33,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION fn_readone_armazem(p_id INT)
+CREATE OR REPLACE FUNCTION readone_armazem(p_id INT)
 RETURNS SETOF armazem AS $$
 BEGIN
     RETURN QUERY SELECT * FROM armazem WHERE id = p_id;

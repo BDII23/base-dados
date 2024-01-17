@@ -4,17 +4,12 @@ CREATE OR REPLACE PROCEDURE sp_create_utilizador_perfil(
 )
 AS $$
 BEGIN
-
-    IF p_perfil IS NULL OR p_perfil = '' THEN
-        RAISE EXCEPTION 'O perfil não pode ser nulo ou vazio.';
-    END IF;
-
     INSERT INTO utilizador_perfil (perfil) VALUES (p_perfil);
 END;
 $$ LANGUAGE plpgsql;
 
 -- Stored Procedure para Update
-CREATE OR REPLACE PROCEDURE sp_update_utilizador_perfil(
+CREATE OR REPLACE PROCEDURE update_utilizador_perfil(
     p_id INT,
     p_perfil VARCHAR(100)
 )
@@ -27,9 +22,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Stored Procedure para Delete
-CREATE OR REPLACE PROCEDURE sp_delete_utilizador_perfil(
-    p_id INT
-)
+CREATE OR REPLACE PROCEDURE delete_utilizador_perfil(p_id INT)
 AS $$
 BEGIN
     DELETE FROM utilizador_perfil
@@ -37,30 +30,20 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Função para Read (Select)
-CREATE OR REPLACE FUNCTION fn_read_utilizador_perfil()
-RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    perfil VARCHAR(100)
-)
+CREATE OR REPLACE FUNCTION read_utilizador_perfil()
+RETURNS SETOF utilizador_perfil
+LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY SELECT id, data_criacao, perfil FROM utilizador_perfil;
+    RETURN QUERY SELECT * FROM utilizador_perfil;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
--- Função para ReadOne (Select com filtro por ID)
-CREATE OR REPLACE FUNCTION fn_readone_utilizador_perfil(
-    p_id INT
-)
-RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    perfil VARCHAR(100)
-)
+CREATE OR REPLACE FUNCTION readone_utilizador_perfil(p_id INT)
+RETURNS SETOF utilizador_perfil
+LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY SELECT id, data_criacao, perfil FROM utilizador_perfil WHERE id = p_id;
+    RETURN QUERY SELECT * FROM utilizador_perfil WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;

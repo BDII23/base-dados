@@ -70,44 +70,19 @@ $$;
 
 --read
 CREATE OR REPLACE FUNCTION fn_read_guia_remessa_fornecedor()
-RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMPTZ,
-    data_envio TIMESTAMPTZ,
-    data_entrega TIMESTAMPTZ,
-    data_recebida TIMESTAMPTZ,
-    endereco_origem VARCHAR(300),
-    endereco_chegada VARCHAR(300),
-    estado_id INT,
-    detalhe_encomenda_id INT,
-    utilizador_id INT
-)
+RETURNS SETOF guia_remessa_fornecedor
+LANGUAGE plpgsql
 AS $$
 BEGIN
     RETURN QUERY SELECT * FROM guia_remessa_fornecedor;
 END;
-$$
-LANGUAGE plpgsql;
+$$;
 
-
---read one
 CREATE OR REPLACE FUNCTION fn_readone_guia_remessa_fornecedor(p_id INT)
-RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMPTZ,
-    data_envio TIMESTAMPTZ,
-    data_entrega TIMESTAMPTZ,
-    data_recebida TIMESTAMPTZ,
-    endereco_origem VARCHAR(300),
-    endereco_chegada VARCHAR(300),
-    estado_id INT,
-    detalhe_encomenda_id INT,
-    utilizador_id INT
-)
+RETURNS SETOF guia_remessa_fornecedor
+LANGUAGE plpgsql
 AS $$
 BEGIN
     RETURN QUERY SELECT * FROM guia_remessa_fornecedor WHERE id = p_id;
 END;
-$$
-LANGUAGE plpgsql;
-
+$$;

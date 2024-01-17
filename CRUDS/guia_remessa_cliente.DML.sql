@@ -1,6 +1,4 @@
---Insert
-
-CREATE OR REPLACE PROCEDURE sp_create_guia_remessa_cliente(
+CREATE OR REPLACE PROCEDURE create_guia_remessa_cliente(
     p_data_envio TIMESTAMP,
     p_data_entrega TIMESTAMP,
     p_endereco_origem VARCHAR(300),
@@ -31,8 +29,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
---Update
-CREATE OR REPLACE PROCEDURE sp_update_guia_remessa_cliente(
+CREATE OR REPLACE PROCEDURE update_guia_remessa_cliente(
     p_id INT,
     p_data_envio TIMESTAMP,
     p_data_entrega TIMESTAMP,
@@ -57,24 +54,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
---Delete
-CREATE OR REPLACE PROCEDURE sp_delete_guia_remessa_cliente(p_id INT)
+CREATE OR REPLACE PROCEDURE delete_guia_remessa_cliente(p_id INT)
 AS $$
 BEGIN
     DELETE FROM guia_remessa_cliente WHERE id = p_id;
 END;
 $$ LANGUAGE plpgsql;
 
---Read 
-CREATE OR REPLACE FUNCTION fn_read_guia_remessa_cliente()
+CREATE OR REPLACE FUNCTION read_guia_remessa_cliente()
 RETURNS SETOF guia_remessa_cliente AS $$
 BEGIN
     RETURN QUERY SELECT * FROM guia_remessa_cliente;
 END;
 $$ LANGUAGE plpgsql;
 
---Read One
-CREATE OR REPLACE FUNCTION fn_read_one_guia_remessa_cliente(p_id INT)
+CREATE OR REPLACE FUNCTION readone_guia_remessa_cliente(p_id INT)
 RETURNS guia_remessa_cliente AS $$
 DECLARE
     result guia_remessa_cliente;
@@ -83,4 +77,3 @@ BEGIN
     RETURN result;
 END;
 $$ LANGUAGE plpgsql;
-

@@ -1,20 +1,15 @@
 --create
-CREATE OR REPLACE PROCEDURE sp_create_tipo_equipamento(p_tipo VARCHAR(150))
+CREATE OR REPLACE PROCEDURE create_tipo_equipamento(p_tipo VARCHAR(150))
 LANGUAGE plpgsql
 AS $$
 BEGIN
-
-    IF p_tipo IS NULL OR p_tipo = '' THEN
-        RAISE EXCEPTION 'O tipo não pode ser nulo ou vazio.';
-    END IF;
-
     INSERT INTO tipo_equipamento (tipo) VALUES (p_tipo);
 END;
 $$;
 
 
 --update
-CREATE OR REPLACE PROCEDURE sp_update_tipo_equipamento(p_id INT, p_tipo VARCHAR(150))
+CREATE OR REPLACE PROCEDURE update_tipo_equipamento(p_id INT, p_tipo VARCHAR(150))
 LANGUAGE plpgsql
 AS $$
 BEGIN
@@ -25,7 +20,7 @@ $$;
 
 
 --delete
-CREATE OR REPLACE PROCEDURE sp_delete_tipo_equipamento(p_id INT)
+CREATE OR REPLACE PROCEDURE delete_tipo_equipamento(p_id INT)
 LANGUAGE plpgsql
 AS $$
 BEGIN
@@ -35,20 +30,20 @@ $$;
 
 
 --read
-CREATE OR REPLACE FUNCTION fn_read_tipo_equipamento()
-RETURNS TABLE (id INT, data_criacao TIMESTAMP, tipo VARCHAR(150))
+CREATE OR REPLACE FUNCTION read_tipo_mao_obra()
+RETURNS SETOF tipo_mao_obra
+LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY SELECT id, data_criacao, tipo FROM tipo_equipamento;
+    RETURN QUERY SELECT * FROM tipo_mao_obra;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
-
---read one
-CREATE OR REPLACE FUNCTION fn_read_one_tipo_equipamento(p_id INT)
-RETURNS TABLE (id INT, data_criacao TIMESTAMP, tipo VARCHAR(150))
+CREATE OR REPLACE FUNCTION readone_tipo_mao_obra(p_id INT)
+RETURNS SETOF tipo_mao_obra
+LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY SELECT id, data_criacao, tipo FROM tipo_equipamento WHERE id = p_id;
+    RETURN QUERY SELECT * FROM tipo_mao_obra WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;

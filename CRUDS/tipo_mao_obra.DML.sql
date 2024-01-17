@@ -1,5 +1,4 @@
---delete
-CREATE OR REPLACE PROCEDURE sp_delete_tipo_mao_obra(IN p_id INT)
+CREATE OR REPLACE PROCEDURE delete_tipo_mao_obra(IN p_id INT)
 AS
 $$
 BEGIN
@@ -8,9 +7,7 @@ END;
 $$
 LANGUAGE plpgsql;
 
-
---create
-CREATE OR REPLACE PROCEDURE sp_create_tipo_mao_obra(
+CREATE OR REPLACE PROCEDURE create_tipo_mao_obra(
     IN p_tipo VARCHAR(100),
     IN p_custo MONEY
 )
@@ -32,8 +29,7 @@ END;
 $$
 LANGUAGE plpgsql;
 
---update
-CREATE OR REPLACE PROCEDURE sp_update_tipo_mao_obra(
+CREATE OR REPLACE PROCEDURE update_tipo_mao_obra(
     IN p_id INT,
     IN p_tipo VARCHAR(100),
     IN p_custo MONEY
@@ -48,34 +44,20 @@ END;
 $$
 LANGUAGE plpgsql;
 
---read
-CREATE OR REPLACE FUNCTION fn_read_tipo_mao_obra()
-RETURNS TABLE (
-    out_id INT,
-    out_data_criacao TIMESTAMP,
-    out_tipo VARCHAR(100),
-    out_custo MONEY
-)
-AS
-$$
+CREATE OR REPLACE FUNCTION read_tipo_mao_obra()
+RETURNS SETOF tipo_mao_obra
+LANGUAGE plpgsql
+AS $$
 BEGIN
     RETURN QUERY SELECT * FROM tipo_mao_obra;
 END;
-$$
-LANGUAGE plpgsql;
+$$;
 
---read one 
-CREATE OR REPLACE FUNCTION fn_readone_tipo_mao_obra(IN p_id INT)
-RETURNS TABLE (
-    out_id INT,
-    out_data_criacao TIMESTAMP,
-    out_tipo VARCHAR(100),
-    out_custo MONEY
-)
-AS
-$$
+CREATE OR REPLACE FUNCTION readone_tipo_mao_obra(p_id INT)
+RETURNS SETOF tipo_mao_obra
+LANGUAGE plpgsql
+AS $$
 BEGIN
     RETURN QUERY SELECT * FROM tipo_mao_obra WHERE id = p_id;
 END;
-$$
-LANGUAGE plpgsql;
+$$;

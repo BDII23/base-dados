@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE sp_delete_fatura_cliente(IN p_id INT)
+CREATE OR REPLACE PROCEDURE delete_fatura_cliente(IN p_id INT)
 LANGUAGE plpgsql
 AS $$
 BEGIN
@@ -6,26 +6,17 @@ BEGIN
 END;
 $$;
 
-
-
-CREATE OR REPLACE PROCEDURE sp_create_fatura_cliente(
+CREATE OR REPLACE PROCEDURE create_fatura_cliente(
     IN p_descricao TEXT
 )
 LANGUAGE plpgsql
 AS $$
-BEGIN
-
-    IF p_descricao IS NULL OR p_descricao = '' THEN
-        RAISE EXCEPTION 'A descrição não pode ser nula ou vazia.';
-    END IF;
-    
+BEGIN    
     INSERT INTO fatura_cliente (descricao) VALUES (p_descricao);
 END;
 $$;
 
-
-
-CREATE OR REPLACE PROCEDURE sp_update_fatura_cliente(
+CREATE OR REPLACE PROCEDURE update_fatura_cliente(
     IN p_id INT,
     IN p_descricao TEXT
 )
@@ -36,9 +27,7 @@ BEGIN
 END;
 $$;
 
-
-
-CREATE OR REPLACE FUNCTION fn_read_fatura_cliente()
+CREATE OR REPLACE FUNCTION read_fatura_cliente()
 RETURNS SETOF fatura_cliente
 LANGUAGE plpgsql
 AS $$
@@ -47,9 +36,7 @@ BEGIN
 END;
 $$;
 
-
-
-CREATE OR REPLACE FUNCTION fn_readone_fatura_cliente(IN p_id INT)
+CREATE OR REPLACE FUNCTION readone_fatura_cliente(IN p_id INT)
 RETURNS SETOF fatura_cliente
 LANGUAGE plpgsql
 AS $$

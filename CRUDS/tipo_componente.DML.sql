@@ -1,5 +1,3 @@
-
--- create
 CREATE OR REPLACE PROCEDURE sp_create_tipo_componente(
     p_tipo VARCHAR(100)
 )
@@ -15,7 +13,6 @@ BEGIN
 END;
 $$;
 
---delete
 CREATE OR REPLACE PROCEDURE sp_delete_tipo_componente(
     p_id INT
 )
@@ -26,8 +23,6 @@ BEGIN
 END;
 $$;
 
-
---update
 CREATE OR REPLACE PROCEDURE sp_update_tipo_componente(
     p_id INT,
     p_tipo VARCHAR(100)
@@ -39,7 +34,6 @@ BEGIN
 END;
 $$;
 
---read
 CREATE OR REPLACE FUNCTION fn_read_tipo_componente()
 RETURNS SETOF tipo_componente
 LANGUAGE plpgsql
@@ -49,10 +43,7 @@ BEGIN
 END;
 $$;
 
---read one
-CREATE OR REPLACE FUNCTION fn_readone_tipo_componente(
-    p_id INT
-)
+CREATE OR REPLACE FUNCTION fn_readone_tipo_componente(p_id INT)
 RETURNS SETOF tipo_componente
 LANGUAGE plpgsql
 AS $$

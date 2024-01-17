@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION sp_delete_encomenda_cliente(p_id INT)
+CREATE OR REPLACE FUNCTION delete_encomenda_cliente(p_id INT)
 RETURNS VOID AS
 $$
 BEGIN
@@ -8,7 +8,7 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION sp_create_encomenda_cliente(
+CREATE OR REPLACE FUNCTION create_encomenda_cliente(
     p_data_criacao TIMESTAMP,
     p_estado_id INT,
     p_cliente_id INT,
@@ -23,7 +23,7 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION sp_update_encomenda_cliente(
+CREATE OR REPLACE FUNCTION update_encomenda_cliente(
     p_id INT,
     p_data_criacao TIMESTAMP,
     p_estado_id INT,
@@ -45,7 +45,7 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fn_read_encomenda_cliente()
+CREATE OR REPLACE FUNCTION read_encomenda_cliente()
 RETURNS TABLE (
     id INT,
     data_criacao TIMESTAMP,
@@ -61,7 +61,7 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fn_readOne_encomenda_cliente(p_id INT)
+CREATE OR REPLACE FUNCTION readone_encomenda_cliente(p_id INT)
 RETURNS TABLE (
     id INT,
     data_criacao TIMESTAMP,

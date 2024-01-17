@@ -1,13 +1,11 @@
-CREATE OR REPLACE FUNCTION sp_delete_detalhe_encomenda_fornecedor(p_id INT)
+CREATE OR REPLACE FUNCTION delete_detalhe_encomenda_fornecedor(p_id INT)
 RETURNS VOID AS $$
 BEGIN
     DELETE FROM detalhe_encomenda_fornecedor WHERE id = p_id;
 END;
 $$ LANGUAGE plpgsql;
 
-
-
-CREATE OR REPLACE FUNCTION sp_create_detalhe_encomenda_fornecedor(
+CREATE OR REPLACE FUNCTION create_detalhe_encomenda_fornecedor(
     p_quantidade INT,
     p_custo_entidade MONEY,
     p_componente_id INT,
@@ -15,26 +13,6 @@ CREATE OR REPLACE FUNCTION sp_create_detalhe_encomenda_fornecedor(
 )
 RETURNS VOID AS $$
 BEGIN
-    
-    IF p_quantidade <= 0 THEN
-        RAISE EXCEPTION 'A quantidade deve ser maior que zero.';
-    END IF;
-
-    
-    IF p_custo_entidade < 0 THEN
-        RAISE EXCEPTION 'O custo por entidade não pode ser negativo.';
-    END IF;
-
-
-    IF p_componente_id IS NULL THEN
-        RAISE EXCEPTION 'O componente_id não pode ser nulo.';
-    END IF;
-
-    
-    IF p_encomenda_id IS NULL THEN
-        RAISE EXCEPTION 'O encomenda_id não pode ser nulo.';
-    END IF;
-    
     INSERT INTO detalhe_encomenda_fornecedor(
         quantidade, custo_entidade, componente_id, encomenda_id
     ) VALUES (
@@ -43,9 +21,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
-
-CREATE OR REPLACE FUNCTION sp_update_detalhe_encomenda_fornecedor(
+CREATE OR REPLACE FUNCTION update_detalhe_encomenda_fornecedor(
     p_id INT,
     p_quantidade INT,
     p_custo_entidade MONEY,
@@ -64,9 +40,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
-
-CREATE OR REPLACE FUNCTION fn_read_detalhe_encomenda_fornecedor()
+CREATE OR REPLACE FUNCTION read_detalhe_encomenda_fornecedor()
 RETURNS TABLE (
     id INT,
     data_criacao TIMESTAMP,
@@ -80,9 +54,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
-
-CREATE OR REPLACE FUNCTION fn_readone_detalhe_encomenda_fornecedor(p_id INT)
+CREATE OR REPLACE FUNCTION readone_detalhe_encomenda_fornecedor(p_id INT)
 RETURNS TABLE (
     id INT,
     data_criacao TIMESTAMP,
