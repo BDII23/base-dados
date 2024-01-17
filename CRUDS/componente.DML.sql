@@ -60,7 +60,7 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fn_read_componente(p_id INT)
+CREATE OR REPLACE FUNCTION fn_readone_componente(p_id INT)
 RETURNS TABLE (
     id INT,
     data_criacao TIMESTAMP,
@@ -77,7 +77,7 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION fn_readone_componente()
+CREATE OR REPLACE FUNCTION fn_read_componente()
 RETURNS TABLE (
     id INT,
     data_criacao TIMESTAMP,
