@@ -11,35 +11,6 @@ CREATE OR REPLACE PROCEDURE sp_create_guia_remessa_cliente(
 )
 AS $$
 BEGIN
-
-    IF p_data_envio IS NULL THEN
-        RAISE EXCEPTION 'A data de envio não pode ser nula.';
-    END IF;
-
-    IF p_data_entrega_prevista IS NULL THEN
-        RAISE EXCEPTION 'A data de entrega prevista não pode ser nula.';
-    END IF;
-
-    IF p_endereco_origem IS NULL OR p_endereco_origem = '' THEN
-        RAISE EXCEPTION 'O endereço de origem não pode ser nulo ou vazio.';
-    END IF;
-
-    IF p_endereco_chegada IS NULL OR p_endereco_chegada = '' THEN
-        RAISE EXCEPTION 'O endereço de chegada não pode ser nulo ou vazio.';
-    END IF;
-
-    IF p_estado_id IS NULL THEN
-        RAISE EXCEPTION 'O estado_id não pode ser nulo.';
-    END IF;
-
-    IF p_detalhe_encomenda_id IS NULL THEN
-        RAISE EXCEPTION 'O detalhe_encomenda_id não pode ser nulo.';
-    END IF;
-
-    IF p_utilizador_id IS NULL THEN
-        RAISE EXCEPTION 'O utilizador_id não pode ser nulo.';
-    END IF;
-
     INSERT INTO guia_remessa_cliente (
         data_envio,
         data_entrega,
