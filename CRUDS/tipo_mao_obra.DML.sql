@@ -7,6 +7,8 @@ END;
 $$
 LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE PROCEDURE create_tipo_mao_obra(
     IN p_tipo VARCHAR(100),
     IN p_custo MONEY
@@ -29,6 +31,8 @@ END;
 $$
 LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE PROCEDURE update_tipo_mao_obra(
     IN p_id INT,
     IN p_tipo VARCHAR(100),
@@ -44,6 +48,8 @@ END;
 $$
 LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE FUNCTION read_tipo_mao_obra()
 RETURNS SETOF tipo_mao_obra
 LANGUAGE plpgsql
@@ -52,6 +58,8 @@ BEGIN
     RETURN QUERY SELECT * FROM tipo_mao_obra;
 END;
 $$;
+
+
 
 CREATE OR REPLACE FUNCTION readone_tipo_mao_obra(p_id INT)
 RETURNS SETOF tipo_mao_obra

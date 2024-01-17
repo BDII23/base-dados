@@ -29,6 +29,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE PROCEDURE update_guia_remessa_cliente(
     p_id INT,
     p_data_envio TIMESTAMP,
@@ -54,6 +56,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE PROCEDURE delete_guia_remessa_cliente(p_id INT)
 AS $$
 BEGIN
@@ -61,19 +65,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE FUNCTION read_guia_remessa_cliente()
-RETURNS SETOF guia_remessa_cliente AS $$
+RETURNS SETOF guia_remessa_cliente
+LANGUAGE plpgsql
+AS $$
 BEGIN
     RETURN QUERY SELECT * FROM guia_remessa_cliente;
 END;
-$$ LANGUAGE plpgsql;
+$$;
+
+
 
 CREATE OR REPLACE FUNCTION readone_guia_remessa_cliente(p_id INT)
-RETURNS guia_remessa_cliente AS $$
-DECLARE
-    result guia_remessa_cliente;
+RETURNS SETOF guia_remessa_cliente
+LANGUAGE plpgsql
+AS $$
 BEGIN
-    SELECT * INTO result FROM guia_remessa_cliente WHERE id = p_id;
-    RETURN result;
+    RETURN QUERY SELECT * FROM guia_remessa_cliente WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;

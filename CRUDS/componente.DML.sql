@@ -5,6 +5,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE PROCEDURE create_componente(
     IN p_descricao TEXT,
     IN p_quantidade INT,
@@ -17,6 +19,8 @@ BEGIN
     VALUES (p_descricao, p_quantidade, p_tipo_id, p_armazem_id);
 END;
 $$ LANGUAGE plpgsql;
+
+
 
 CREATE OR REPLACE PROCEDURE update_componente(
     IN p_id INT,
@@ -36,32 +40,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION readone_componente(p_id INT)
-RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    descricao TEXT,
-    quantidade INT,
-    tipo_id INT,
-    armazem_id INT
-)
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM componente WHERE id = p_id;
-END;
-$$ LANGUAGE plpgsql;
+
 
 CREATE OR REPLACE FUNCTION read_componente()
-RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    descricao TEXT,
-    quantidade INT,
-    tipo_id INT,
-    armazem_id INT
-)
+RETURNS SETOF componente
+LANGUAGE plpgsql
 AS $$
 BEGIN
     RETURN QUERY SELECT * FROM componente;
 END;
-$$ LANGUAGE plpgsql;
+$$;
+
+
+
+CREATE OR REPLACE FUNCTION readone_componente(p_id INT)
+RETURNS SETOF componente
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN QUERY SELECT * FROM componente WHERE id = p_id;
+END;
+$$;

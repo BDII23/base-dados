@@ -5,6 +5,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE FUNCTION sp_create_detalhe_encomenda_cliente(
     _quantidade INT,
     _custo_unidade MONEY,
@@ -16,6 +18,8 @@ BEGIN
     VALUES (_quantidade, _custo_unidade, _equipamento_id, _encomenda_id);
 END;
 $$ LANGUAGE plpgsql;
+
+
 
 CREATE OR REPLACE FUNCTION update_detalhe_encomenda_cliente(
     _id INT,
@@ -35,30 +39,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION read_detalhe_encomenda_cliente()
-RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    quantidade INT,
-    custo_unidade MONEY,
-    equipamento_id INT,
-    encomenda_id INT
-) AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM detalhe_encomenda_cliente;
-END;
-$$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION readone_detalhe_encomenda_cliente(_id INT)
-RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    quantidade INT,
-    custo_unidade MONEY,
-    equipamento_id INT,
-    encomenda_id INT
-) AS $$
+
+CREATE OR REPLACE FUNCTION read_datalhe_encomenda_cliente()
+RETURNS SETOF datalhe_encomenda_cliente
+LANGUAGE plpgsql
+AS $$
 BEGIN
-    RETURN QUERY SELECT * FROM detalhe_encomenda_cliente WHERE id = _id;
+    RETURN QUERY SELECT * FROM datalhe_encomenda_cliente;
 END;
-$$ LANGUAGE plpgsql;
+$$;
+
+
+
+CREATE OR REPLACE FUNCTION readone_datalhe_encomenda_cliente(p_id INT)
+RETURNS SETOF datalhe_encomenda_cliente
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN QUERY SELECT * FROM datalhe_encomenda_cliente WHERE id = p_id;
+END;
+$$;

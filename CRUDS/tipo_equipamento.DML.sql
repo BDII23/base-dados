@@ -1,4 +1,3 @@
---create
 CREATE OR REPLACE PROCEDURE create_tipo_equipamento(p_tipo VARCHAR(150))
 LANGUAGE plpgsql
 AS $$
@@ -8,7 +7,7 @@ END;
 $$;
 
 
---update
+
 CREATE OR REPLACE PROCEDURE update_tipo_equipamento(p_id INT, p_tipo VARCHAR(150))
 LANGUAGE plpgsql
 AS $$
@@ -19,7 +18,6 @@ $$;
 
 
 
---delete
 CREATE OR REPLACE PROCEDURE delete_tipo_equipamento(p_id INT)
 LANGUAGE plpgsql
 AS $$
@@ -29,7 +27,7 @@ END;
 $$;
 
 
---read
+
 CREATE OR REPLACE FUNCTION read_tipo_mao_obra()
 RETURNS SETOF tipo_mao_obra
 LANGUAGE plpgsql
@@ -38,6 +36,8 @@ BEGIN
     RETURN QUERY SELECT * FROM tipo_mao_obra;
 END;
 $$;
+
+
 
 CREATE OR REPLACE FUNCTION readone_tipo_mao_obra(p_id INT)
 RETURNS SETOF tipo_mao_obra

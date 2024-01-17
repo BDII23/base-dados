@@ -13,15 +13,17 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE sp_delete_tipo_componente(
-    p_id INT
-)
+
+
+CREATE OR REPLACE PROCEDURE sp_delete_tipo_componente(p_id INT)
 LANGUAGE plpgsql
 AS $$
 BEGIN
     DELETE FROM tipo_componente WHERE id = p_id;
 END;
 $$;
+
+
 
 CREATE OR REPLACE PROCEDURE sp_update_tipo_componente(
     p_id INT,
@@ -34,6 +36,8 @@ BEGIN
 END;
 $$;
 
+
+
 CREATE OR REPLACE FUNCTION fn_read_tipo_componente()
 RETURNS SETOF tipo_componente
 LANGUAGE plpgsql
@@ -43,6 +47,8 @@ BEGIN
 END;
 $$;
 
+
+
 CREATE OR REPLACE FUNCTION fn_readone_tipo_componente(p_id INT)
 RETURNS SETOF tipo_componente
 LANGUAGE plpgsql
@@ -51,4 +57,3 @@ BEGIN
     RETURN QUERY SELECT * FROM tipo_componente WHERE id = p_id;
 END;
 $$;
-

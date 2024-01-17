@@ -6,6 +6,8 @@ BEGIN
 END;
 $$;
 
+
+
 CREATE OR REPLACE PROCEDURE create_fatura_fornecedor(
   IN p_descricao TEXT
 )
@@ -15,6 +17,8 @@ BEGIN
   INSERT INTO fatura_fornecedor (descricao) VALUES (p_descricao);
 END;
 $$;
+
+
 
 CREATE OR REPLACE PROCEDURE update_fatura_fornecedor(
   IN p_id INT,
@@ -27,26 +31,24 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION read_fatura_fornecedor()
-RETURNS TABLE (
-  id INT,
-  data_criacao TIMESTAMP,
-  descricao TEXT
-)
-AS $$
-BEGIN
-  RETURN QUERY SELECT * FROM fatura_fornecedor;
-END;
-$$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION readone_fatura_fornecedor(IN p_id INT)
-RETURNS TABLE (
-  id INT,
-  data_criacao TIMESTAMP,
-  descricao TEXT
-)
+
+CREATE OR REPLACE FUNCTION read_tipo_componente()
+RETURNS SETOF tipo_componente
+LANGUAGE plpgsql
 AS $$
 BEGIN
-  RETURN QUERY SELECT * FROM fatura_fornecedor WHERE id = p_id;
+    RETURN QUERY SELECT * FROM tipo_componente;
 END;
-$$ LANGUAGE plpgsql;
+$$;
+
+
+
+CREATE OR REPLACE FUNCTION readone_tipo_componente(p_id INT)
+RETURNS SETOF tipo_componente
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN QUERY SELECT * FROM tipo_componente WHERE id = p_id;
+END;
+$$;

@@ -26,6 +26,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE FUNCTION update_ficha_producao(
     ficha_id INT,
     quantidade_equipamentos INT,
@@ -49,6 +51,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE FUNCTION delete_ficha_producao(ficha_id INT)
 RETURNS VOID AS $$
 BEGIN
@@ -57,19 +61,23 @@ END;
 $$ LANGUAGE plpgsql;
 
 
+
 CREATE OR REPLACE FUNCTION read_ficha_producao()
-RETURNS SETOF ficha_producao AS $$
+RETURNS SETOF ficha_producao
+LANGUAGE plpgsql
+AS $$
 BEGIN
     RETURN QUERY SELECT * FROM ficha_producao;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
-CREATE OR REPLACE FUNCTION readone_ficha_producao(ficha_id INT)
-RETURNS ficha_producao AS $$
-DECLARE
-    ficha ficha_producao;
+
+
+CREATE OR REPLACE FUNCTION readone_ficha_producao(p_id INT)
+RETURNS SETOF ficha_producao
+LANGUAGE plpgsql
+AS $$
 BEGIN
-    SELECT * INTO ficha FROM ficha_producao WHERE id = ficha_id;
-    RETURN ficha;
+    RETURN QUERY SELECT * FROM ficha_producao WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;

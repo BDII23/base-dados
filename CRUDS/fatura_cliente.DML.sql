@@ -6,6 +6,8 @@ BEGIN
 END;
 $$;
 
+
+
 CREATE OR REPLACE PROCEDURE create_fatura_cliente(
     IN p_descricao TEXT
 )
@@ -15,6 +17,8 @@ BEGIN
     INSERT INTO fatura_cliente (descricao) VALUES (p_descricao);
 END;
 $$;
+
+
 
 CREATE OR REPLACE PROCEDURE update_fatura_cliente(
     IN p_id INT,
@@ -27,6 +31,8 @@ BEGIN
 END;
 $$;
 
+
+
 CREATE OR REPLACE FUNCTION read_fatura_cliente()
 RETURNS SETOF fatura_cliente
 LANGUAGE plpgsql
@@ -36,7 +42,9 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION readone_fatura_cliente(IN p_id INT)
+
+
+CREATE OR REPLACE FUNCTION readone_fatura_cliente(p_id INT)
 RETURNS SETOF fatura_cliente
 LANGUAGE plpgsql
 AS $$

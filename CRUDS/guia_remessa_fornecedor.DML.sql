@@ -1,6 +1,4 @@
---create
-
-CREATE OR REPLACE PROCEDURE sp_create_guia_remessa_fornecedor(
+CREATE OR REPLACE PROCEDURE create_guia_remessa_fornecedor(
     IN p_data_envio TIMESTAMPTZ,
     IN p_data_entrega TIMESTAMPTZ,
     IN p_endereco_origem VARCHAR(300),
@@ -32,8 +30,9 @@ BEGIN
 END;
 $$;
 
---Update 
-CREATE OR REPLACE PROCEDURE sp_update_guia_remessa_fornecedor(
+
+
+CREATE OR REPLACE PROCEDURE update_guia_remessa_fornecedor(
     IN p_id INT,
     IN p_data_envio TIMESTAMPTZ,
     IN p_data_entrega TIMESTAMPTZ,
@@ -59,8 +58,9 @@ BEGIN
 END;
 $$;
 
---delete 
-CREATE OR REPLACE PROCEDURE sp_delete_guia_remessa_fornecedor(IN p_id INT)
+
+
+CREATE OR REPLACE PROCEDURE delete_guia_remessa_fornecedor(IN p_id INT)
 LANGUAGE plpgsql
 AS $$
 BEGIN
@@ -68,8 +68,9 @@ BEGIN
 END;
 $$;
 
---read
-CREATE OR REPLACE FUNCTION fn_read_guia_remessa_fornecedor()
+
+
+CREATE OR REPLACE FUNCTION read_guia_remessa_fornecedor()
 RETURNS SETOF guia_remessa_fornecedor
 LANGUAGE plpgsql
 AS $$
@@ -78,7 +79,9 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION fn_readone_guia_remessa_fornecedor(p_id INT)
+
+
+CREATE OR REPLACE FUNCTION readone_guia_remessa_fornecedor(p_id INT)
 RETURNS SETOF guia_remessa_fornecedor
 LANGUAGE plpgsql
 AS $$

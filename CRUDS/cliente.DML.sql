@@ -11,6 +11,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE PROCEDURE update_cliente(
     IN p_id INT,
     IN p_email VARCHAR(500),
@@ -26,6 +28,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE PROCEDURE delete_cliente(
     IN p_id INT
 )
@@ -35,21 +39,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE FUNCTION read_cliente()
-RETURNS SETOF cliente AS $$
+RETURNS SETOF cliente
+LANGUAGE plpgsql
+AS $$
 BEGIN
     RETURN QUERY SELECT * FROM cliente;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
-CREATE OR REPLACE FUNCTION readone_cliente(
-    IN p_id INT
-)
-RETURNS cliente AS $$
-DECLARE
-    cliente_encontrado cliente;
+
+
+CREATE OR REPLACE FUNCTION readone_cliente(p_id INT)
+RETURNS SETOF cliente
+LANGUAGE plpgsql
+AS $$
 BEGIN
-    SELECT * INTO cliente_encontrado FROM cliente WHERE id = p_id;
-    RETURN cliente_encontrado;
+    RETURN QUERY SELECT * FROM cliente WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;

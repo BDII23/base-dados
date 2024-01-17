@@ -12,12 +12,16 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE PROCEDURE delete_fornecedor(p_id INT)
 AS $$
 BEGIN
     DELETE FROM fornecedor WHERE id = p_id;
 END;
 $$ LANGUAGE plpgsql;
+
+
 
 CREATE OR REPLACE PROCEDURE update_fornecedor(
     p_id INT,
@@ -39,34 +43,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE FUNCTION read_fornecedor()
-RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    nome VARCHAR(100),
-    nif CHAR(9),
-    email VARCHAR(200),
-    telefone CHAR(9),
-    endereco VARCHAR(500)
-)
+RETURNS SETOF fornecedor
+LANGUAGE plpgsql
 AS $$
 BEGIN
     RETURN QUERY SELECT * FROM fornecedor;
 END;
-$$ LANGUAGE plpgsql;
+$$;
+
+
 
 CREATE OR REPLACE FUNCTION readone_fornecedor(p_id INT)
-RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    nome VARCHAR(100),
-    nif CHAR(9),
-    email VARCHAR(200),
-    telefone CHAR(9),
-    endereco VARCHAR(500)
-)
+RETURNS SETOF fornecedor
+LANGUAGE plpgsql
 AS $$
 BEGIN
     RETURN QUERY SELECT * FROM fornecedor WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;

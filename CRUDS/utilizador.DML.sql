@@ -6,6 +6,8 @@ BEGIN
 END;
 $$;
 
+
+
 CREATE OR REPLACE PROCEDURE create_utilizador(
     p_email VARCHAR(500),
     p_senha VARCHAR(400),
@@ -20,6 +22,8 @@ BEGIN
     VALUES (p_email, p_senha, p_nome, p_sobrenome, p_perfil_id);
 END;
 $$;
+
+
 
 CREATE OR REPLACE PROCEDURE update_utilizador(
     p_id INT,
@@ -42,6 +46,8 @@ BEGIN
 END;
 $$;
 
+
+
 CREATE OR REPLACE FUNCTION read_utilizador()
 RETURNS SETOF utilizador
 LANGUAGE plpgsql
@@ -50,6 +56,8 @@ BEGIN
     RETURN QUERY SELECT * FROM utilizador;
 END;
 $$;
+
+
 
 CREATE OR REPLACE FUNCTION readone_utilizador(p_id INT)
 RETURNS SETOF utilizador

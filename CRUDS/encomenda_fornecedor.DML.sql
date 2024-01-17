@@ -40,29 +40,21 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION read_encomenda_fornecedor()
-RETURNS TABLE (
-    out_id INT,
-    out_data_criacao TIMESTAMP,
-    out_estado_id INT,
-    out_fornecedor_id INT
-)
+RETURNS SETOF encomenda_fornecedor
+LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY SELECT id, data_criacao, estado_id, fornecedor_id, fatura_id FROM encomenda_fornecedor;
+    RETURN QUERY SELECT * FROM encomenda_fornecedor;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 
-CREATE OR REPLACE FUNCTION readone_encomenda_fornecedor(in_id INT)
-RETURNS TABLE (
-    out_id INT,
-    out_data_criacao TIMESTAMP,
-    out_estado_id INT,
-    out_fornecedor_id INT
-)
+CREATE OR REPLACE FUNCTION readone_encomenda_fornecedor(p_id INT)
+RETURNS SETOF encomenda_fornecedor
+LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY SELECT id, data_criacao, estado_id, fornecedor_id, fatura_id FROM encomenda_fornecedor WHERE id = in_id;
+    RETURN QUERY SELECT * FROM encomenda_fornecedor WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;

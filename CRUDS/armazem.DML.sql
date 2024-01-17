@@ -26,16 +26,21 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION read_armazem()
-RETURNS SETOF armazem AS $$
+RETURNS SETOF armazem
+LANGUAGE plpgsql
+AS $$
 BEGIN
     RETURN QUERY SELECT * FROM armazem;
 END;
-$$ LANGUAGE plpgsql;
+$$;
+
 
 
 CREATE OR REPLACE FUNCTION readone_armazem(p_id INT)
-RETURNS SETOF armazem AS $$
+RETURNS SETOF armazem
+LANGUAGE plpgsql
+AS $$
 BEGIN
     RETURN QUERY SELECT * FROM armazem WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;

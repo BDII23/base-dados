@@ -46,31 +46,21 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION read_encomenda_cliente()
-RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    estado_id INT,
-    cliente_id INT,
-    fatura_id INT
-) AS
-$$
+RETURNS SETOF encomenda_cliente
+LANGUAGE plpgsql
+AS $$
 BEGIN
     RETURN QUERY SELECT * FROM encomenda_cliente;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 
 CREATE OR REPLACE FUNCTION readone_encomenda_cliente(p_id INT)
-RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    estado_id INT,
-    cliente_id INT,
-    fatura_id INT
-) AS
-$$
+RETURNS SETOF encomenda_cliente
+LANGUAGE plpgsql
+AS $$
 BEGIN
     RETURN QUERY SELECT * FROM encomenda_cliente WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;

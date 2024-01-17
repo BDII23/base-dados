@@ -5,6 +5,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE FUNCTION create_detalhe_encomenda_fornecedor(
     p_quantidade INT,
     p_custo_entidade MONEY,
@@ -20,6 +22,8 @@ BEGIN
     );
 END;
 $$ LANGUAGE plpgsql;
+
+
 
 CREATE OR REPLACE FUNCTION update_detalhe_encomenda_fornecedor(
     p_id INT,
@@ -40,30 +44,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+
 CREATE OR REPLACE FUNCTION read_detalhe_encomenda_fornecedor()
-RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    quantidade INT,
-    custo_entidade MONEY,
-    componente_id INT,
-    encomenda_id INT
-) AS $$
+RETURNS SETOF detalhe_encomenda_fornecedor
+LANGUAGE plpgsql
+AS $$
 BEGIN
     RETURN QUERY SELECT * FROM detalhe_encomenda_fornecedor;
 END;
-$$ LANGUAGE plpgsql;
+$$;
+
+
 
 CREATE OR REPLACE FUNCTION readone_detalhe_encomenda_fornecedor(p_id INT)
-RETURNS TABLE (
-    id INT,
-    data_criacao TIMESTAMP,
-    quantidade INT,
-    custo_entidade MONEY,
-    componente_id INT,
-    encomenda_id INT
-) AS $$
+RETURNS SETOF detalhe_encomenda_fornecedor
+LANGUAGE plpgsql
+AS $$
 BEGIN
     RETURN QUERY SELECT * FROM detalhe_encomenda_fornecedor WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;

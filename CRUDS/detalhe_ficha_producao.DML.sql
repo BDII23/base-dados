@@ -40,34 +40,22 @@ $$;
 
 
 
-CREATE OR REPLACE FUNCTION read_detalhe_ficha_producao()
-RETURNS TABLE (
-    detalhe_id INT,
-    data_criacao TIMESTAMP,
-    descricao TEXT,
-    componente_id INT
-)
+CREATE OR REPLACE FUNCTION read_datalhe_ficha_producao()
+RETURNS SETOF datalhe_ficha_producao
+LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY SELECT id, data_criacao, descricao, componente_id FROM detalhe_ficha_producao;
+    RETURN QUERY SELECT * FROM datalhe_ficha_producao;
 END;
-$$
-LANGUAGE plpgsql;
+$$;
 
 
 
-CREATE OR REPLACE FUNCTION readone_detalhe_ficha_producao(
-    p_detalhe_id INT
-)
-RETURNS TABLE (
-    detalhe_id INT,
-    data_criacao TIMESTAMP,
-    descricao TEXT,
-    componente_id INT
-)
+CREATE OR REPLACE FUNCTION readone_datalhe_ficha_producao(p_id INT)
+RETURNS SETOF datalhe_ficha_producao
+LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY SELECT id, data_criacao, descricao, componente_id FROM detalhe_ficha_producao WHERE id = p_detalhe_id;
+    RETURN QUERY SELECT * FROM datalhe_ficha_producao WHERE id = p_id;
 END;
-$$
-LANGUAGE plpgsql;
+$$;
