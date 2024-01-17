@@ -41,22 +41,39 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION read_datalhe_encomenda_cliente()
-RETURNS SETOF datalhe_encomenda_cliente
+CREATE OR REPLACE FUNCTION read_detalhe_encomenda_cliente()
+RETURNS SETOF detalhe_encomenda_cliente
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY SELECT * FROM datalhe_encomenda_cliente;
+    RETURN QUERY SELECT * FROM detalhe_encomenda_cliente;
 END;
 $$;
 
 
 
-CREATE OR REPLACE FUNCTION readone_datalhe_encomenda_cliente(p_id INT)
-RETURNS SETOF datalhe_encomenda_cliente
+CREATE OR REPLACE FUNCTION readone_detalhe_encomenda_cliente(p_id INT)
+RETURNS SETOF detalhe_encomenda_cliente
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY SELECT * FROM datalhe_encomenda_cliente WHERE id = p_id;
+    RETURN QUERY SELECT * FROM detalhe_encomenda_cliente WHERE id = p_id;
 END;
 $$;
+
+
+
+
+CREATE OR REPLACE FUNCTION readjson_detalhe_encomenda_cliente()
+RETURNS JSON
+AS $$
+DECLARE
+    json JSON;
+BEGIN
+    SELECT array_to_json(array_agg(row_to_json(row)))
+    INTO json
+    FROM (SELECT * FROM detalhe_encomenda_cliente) row;
+
+    RETURN json;
+END;
+$$ LANGUAGE plpgsql;

@@ -69,3 +69,19 @@ BEGIN
     RETURN QUERY SELECT * FROM tipo_mao_obra WHERE id = p_id;
 END;
 $$;
+
+
+
+CREATE OR REPLACE FUNCTION readjson_tipo_mao_obra()
+RETURNS JSON
+AS $$
+DECLARE
+    json JSON;
+BEGIN
+    SELECT array_to_json(array_agg(row_to_json(row)))
+    INTO json
+    FROM (SELECT * FROM tipo_mao_obra) row;
+
+    RETURN json;
+END;
+$$ LANGUAGE plpgsql;

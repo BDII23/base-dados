@@ -81,3 +81,19 @@ BEGIN
     RETURN QUERY SELECT * FROM ficha_producao WHERE id = p_id;
 END;
 $$;
+
+
+
+CREATE OR REPLACE FUNCTION readjson_ficha_producao()
+RETURNS JSON
+AS $$
+DECLARE
+    json JSON;
+BEGIN
+    SELECT array_to_json(array_agg(row_to_json(row)))
+    INTO json
+    FROM (SELECT * FROM ficha_producao) row;
+
+    RETURN json;
+END;
+$$ LANGUAGE plpgsql;

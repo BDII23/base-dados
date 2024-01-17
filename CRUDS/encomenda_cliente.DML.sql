@@ -64,3 +64,19 @@ BEGIN
     RETURN QUERY SELECT * FROM encomenda_cliente WHERE id = p_id;
 END;
 $$;
+
+
+
+CREATE OR REPLACE FUNCTION readjson_encomenda_cliente()
+RETURNS JSON
+AS $$
+DECLARE
+    json JSON;
+BEGIN
+    SELECT array_to_json(array_agg(row_to_json(row)))
+    INTO json
+    FROM (SELECT * FROM encomenda_cliente) row;
+
+    RETURN json;
+END;
+$$ LANGUAGE plpgsql;

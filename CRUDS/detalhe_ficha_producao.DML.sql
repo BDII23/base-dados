@@ -40,22 +40,38 @@ $$;
 
 
 
-CREATE OR REPLACE FUNCTION read_datalhe_ficha_producao()
-RETURNS SETOF datalhe_ficha_producao
+CREATE OR REPLACE FUNCTION read_detalhe_ficha_producao()
+RETURNS SETOF detalhe_ficha_producao
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY SELECT * FROM datalhe_ficha_producao;
+    RETURN QUERY SELECT * FROM detalhe_ficha_producao;
 END;
 $$;
 
 
 
-CREATE OR REPLACE FUNCTION readone_datalhe_ficha_producao(p_id INT)
-RETURNS SETOF datalhe_ficha_producao
+CREATE OR REPLACE FUNCTION readone_detalhe_ficha_producao(p_id INT)
+RETURNS SETOF detalhe_ficha_producao
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    RETURN QUERY SELECT * FROM datalhe_ficha_producao WHERE id = p_id;
+    RETURN QUERY SELECT * FROM detalhe_ficha_producao WHERE id = p_id;
 END;
 $$;
+
+
+
+CREATE OR REPLACE FUNCTION readjson_detalhe_ficha_producao()
+RETURNS JSON
+AS $$
+DECLARE
+    json JSON;
+BEGIN
+    SELECT array_to_json(array_agg(row_to_json(row)))
+    INTO json
+    FROM (SELECT * FROM detalhe_ficha_producao) row;
+
+    RETURN json;
+END;
+$$ LANGUAGE plpgsql;
