@@ -70,9 +70,23 @@ AS $$
 DECLARE
     json JSON;
 BEGIN
-    SELECT array_to_json(array_agg(row_to_json(row)))
+    SELECT json_agg(componente)
     INTO json
-    FROM (SELECT * FROM componente) row;
+    FROM (
+        SELECT
+            componente.*,
+            (
+                SELECT json_agg(tipo_componente)
+                FROM tipo_componente
+                WHERE tipo_componente.id = componente.tipo_id
+            ) tipo_componente,
+            (
+                SELECT json_agg(armazem)
+                FROM armazem
+                WHERE armazem.id = componente.armazem_id
+            ) armazem
+        FROM componente
+		) componente;
 
     RETURN json;
 END;
