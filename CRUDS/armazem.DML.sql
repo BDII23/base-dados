@@ -1,5 +1,7 @@
-CREATE OR REPLACE FUNCTION screate_armazem(p_endereco VARCHAR(100))
-RETURNS VOID AS $$
+CREATE OR REPLACE PROCEDURE create_armazem(
+    p_endereco VARCHAR(100)
+)
+AS $$
 BEGIN
     INSERT INTO armazem (endereco) VALUES (p_endereco);
 END;
@@ -7,8 +9,8 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION update_armazem(p_id INT, p_endereco VARCHAR(100))
-RETURNS VOID AS $$
+CREATE OR REPLACE PROCEDURE update_armazem(p_id INT, p_endereco VARCHAR(100))
+AS $$
 BEGIN
     UPDATE armazem SET endereco = p_endereco WHERE id = p_id;
 END;
@@ -16,12 +18,13 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION delete_armazem(p_id INT)
-RETURNS VOID AS $$
+CREATE OR REPLACE PROCEDURE delete_armazem(p_id INT)
+LANGUAGE plpgsql
+AS $$
 BEGIN
     DELETE FROM armazem WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 
@@ -37,13 +40,19 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION readone_armazem(p_id INT)
-RETURNS SETOF armazem
-LANGUAGE plpgsql
+RETURNS JSON
 AS $$
+DECLARE
+    json JSON;
 BEGIN
-    RETURN QUERY SELECT * FROM armazem WHERE id = p_id;
+    SELECT json_agg(armazem)
+    INTO json
+    FROM armazem
+	WHERE p_id = armazem.id;
+
+    RETURN json;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
 
 

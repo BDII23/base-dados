@@ -1,20 +1,20 @@
-CREATE OR REPLACE FUNCTION delete_encomenda_cliente(p_id INT)
-RETURNS VOID AS
-$$
+CREATE OR REPLACE PROCEDURE delete_encomenda_cliente(p_id INT)
+LANGUAGE plpgsql
+AS $$
 BEGIN
     DELETE FROM encomenda_cliente WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 
-CREATE OR REPLACE FUNCTION create_encomenda_cliente(
+CREATE OR REPLACE PROCEDURE create_encomenda_cliente(
     p_data_criacao TIMESTAMP,
     p_estado_id INT,
     p_cliente_id INT,
-    p_fatura_id INT)
-RETURNS VOID AS
-$$
+    p_fatura_id INT
+)
+AS $$
 BEGIN
     INSERT INTO encomenda_cliente (data_criacao, estado_id, cliente_id, fatura_id)
     VALUES (p_data_criacao, p_estado_id, p_cliente_id, p_fatura_id);
@@ -23,14 +23,13 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION update_encomenda_cliente(
+CREATE OR REPLACE PROCEDURE update_encomenda_cliente(
     p_id INT,
     p_data_criacao TIMESTAMP,
     p_estado_id INT,
     p_cliente_id INT,
     p_fatura_id INT)
-RETURNS VOID AS
-$$
+AS $$
 BEGIN
     UPDATE encomenda_cliente
     SET 
@@ -57,13 +56,19 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION readone_encomenda_cliente(p_id INT)
-RETURNS SETOF encomenda_cliente
-LANGUAGE plpgsql
+RETURNS JSON
 AS $$
+DECLARE
+    json JSON;
 BEGIN
-    RETURN QUERY SELECT * FROM encomenda_cliente WHERE id = p_id;
+    SELECT json_agg(encomenda_cliente)
+    INTO json
+    FROM encomenda_cliente
+	WHERE p_id = encomenda_cliente.id;
+
+    RETURN json;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
 
 

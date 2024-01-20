@@ -1,32 +1,33 @@
-CREATE OR REPLACE FUNCTION delete_equipamento(in_id INT)
-RETURNS VOID AS $$
+CREATE OR REPLACE PROCEDURE delete_equipamento(p_id INT)
+LANGUAGE plpgsql
+AS $$
 BEGIN
   DELETE FROM equipamento WHERE id = in_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 
-CREATE OR REPLACE FUNCTION create_equipamento(
+CREATE OR REPLACE PROCEDURE create_equipamento(
     in_descricao TEXT,
     in_tipo_id INT
 )
-RETURNS VOID AS $$
+AS $$
 BEGIN
-  INSERT INTO equipamento (descricao, tipo_id) VALUES (in_descricao, in_tipo_id);
+    INSERT INTO equipamento (descricao, tipo_id) 
+    VALUES (in_descricao, in_tipo_id);
 END;
 $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION update_equipamento(
+CREATE OR REPLACE PROCEDURE update_equipamento(
     in_id INT,
     in_descricao TEXT,
-    in_tipo_id INT
-)
-RETURNS VOID AS $$
+    in_tipo_id INT)
+AS $$
 BEGIN
-  UPDATE equipamento SET descricao = in_descricao, tipo_id = in_tipo_id WHERE id = in_id;
+    UPDATE equipamento SET descricao = in_descricao, tipo_id = in_tipo_id WHERE id = in_id;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -44,13 +45,19 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION readone_equipamento(p_id INT)
-RETURNS SETOF equipamento
-LANGUAGE plpgsql
+RETURNS JSON
 AS $$
+DECLARE
+    json JSON;
 BEGIN
-    RETURN QUERY SELECT * FROM equipamento WHERE id = p_id;
+    SELECT json_agg(equipamento)
+    INTO json
+    FROM equipamento
+	WHERE p_id = equipamento.id;
+
+    RETURN json;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
 
 

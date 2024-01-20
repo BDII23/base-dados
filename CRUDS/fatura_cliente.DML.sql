@@ -45,13 +45,19 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION readone_fatura_cliente(p_id INT)
-RETURNS SETOF fatura_cliente
-LANGUAGE plpgsql
+RETURNS JSON
 AS $$
+DECLARE
+    json JSON;
 BEGIN
-    RETURN QUERY SELECT * FROM fatura_cliente WHERE id = p_id;
+    SELECT json_agg(fatura_cliente)
+    INTO json
+    FROM fatura_cliente
+	WHERE p_id = fatura_cliente.id;
+
+    RETURN json;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
 
 

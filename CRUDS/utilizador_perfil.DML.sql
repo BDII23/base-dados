@@ -45,13 +45,19 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION readone_utilizador_perfil(p_id INT)
-RETURNS SETOF utilizador_perfil
-LANGUAGE plpgsql
+RETURNS JSON
 AS $$
+DECLARE
+    json JSON;
 BEGIN
-    RETURN QUERY SELECT * FROM utilizador_perfil WHERE id = p_id;
+    SELECT json_agg(utilizador_perfil)
+    INTO json
+    FROM utilizador_perfil
+	WHERE p_id = utilizador_perfil.id;
+
+    RETURN json;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
 
 

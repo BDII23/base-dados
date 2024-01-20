@@ -82,13 +82,19 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION readone_guia_remessa_fornecedor(p_id INT)
-RETURNS SETOF guia_remessa_fornecedor
-LANGUAGE plpgsql
+RETURNS JSON
 AS $$
+DECLARE
+    json JSON;
 BEGIN
-    RETURN QUERY SELECT * FROM guia_remessa_fornecedor WHERE id = p_id;
+    SELECT json_agg(guia_remessa_fornecedor)
+    INTO json
+    FROM guia_remessa_fornecedor
+	WHERE p_id = guia_remessa_fornecedor.id;
+
+    RETURN json;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
 
 

@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION create_ficha_producao(
+CREATE OR REPLACE PROCEDURE create_ficha_producao(
     quantidade_equipamentos INT,
     descricao TEXT,
     horas INT,
@@ -6,7 +6,7 @@ CREATE OR REPLACE FUNCTION create_ficha_producao(
     tipo_mao_obra_id INT,
     equipamento_id INT
 )
-RETURNS VOID AS $$
+AS $$
 BEGIN
     INSERT INTO ficha_producao(
         quantidade_equipamentos,
@@ -28,16 +28,15 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION update_ficha_producao(
+CREATE OR REPLACE PROCEDURE update_ficha_producao(
     ficha_id INT,
     quantidade_equipamentos INT,
     descricao TEXT,
     horas INT,
     utilizador_id INT,
     tipo_mao_obra_id INT,
-    equipamento_id INT
-)
-RETURNS VOID AS $$
+    equipamento_id INT)
+AS $$
 BEGIN
     UPDATE ficha_producao
     SET
@@ -53,12 +52,13 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION delete_ficha_producao(ficha_id INT)
-RETURNS VOID AS $$
+CREATE OR REPLACE PROCEDURE delete_ficha_producao(p_id INT)
+LANGUAGE plpgsql
+AS $$
 BEGIN
     DELETE FROM ficha_producao WHERE id = ficha_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 
@@ -74,13 +74,19 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION readone_ficha_producao(p_id INT)
-RETURNS SETOF ficha_producao
-LANGUAGE plpgsql
+RETURNS JSON
 AS $$
+DECLARE
+    json JSON;
 BEGIN
-    RETURN QUERY SELECT * FROM ficha_producao WHERE id = p_id;
+    SELECT json_agg(ficha_producao)
+    INTO json
+    FROM ficha_producao
+	WHERE p_id = ficha_producao.id;
+
+    RETURN json;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
 
 

@@ -40,13 +40,19 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION readone_tipo_equipamento(p_id INT)
-RETURNS SETOF tipo_equipamento
-LANGUAGE plpgsql
+RETURNS JSON
 AS $$
+DECLARE
+    json JSON;
 BEGIN
-    RETURN QUERY SELECT * FROM tipo_equipamento WHERE id = p_id;
+    SELECT json_agg(tipo_equipamento)
+    INTO json
+    FROM tipo_equipamento
+	WHERE p_id = tipo_equipamento.id;
+
+    RETURN json;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
 
 

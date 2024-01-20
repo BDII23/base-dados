@@ -16,16 +16,6 @@ CREATE OR REPLACE PROCEDURE create_tipo_mao_obra(
 AS
 $$
 BEGIN
-
-    IF p_tipo IS NULL OR p_tipo = '' THEN
-        RAISE EXCEPTION 'O tipo não pode ser nulo ou vazio.';
-    END IF;
-
-   
-    IF p_custo < 0 THEN
-        RAISE EXCEPTION 'O custo não pode ser negativo.';
-    END IF;
-
     INSERT INTO tipo_mao_obra (tipo, custo) VALUES (p_tipo, p_custo);
 END;
 $$
@@ -62,13 +52,19 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION readone_tipo_mao_obra(p_id INT)
-RETURNS SETOF tipo_mao_obra
-LANGUAGE plpgsql
+RETURNS JSON
 AS $$
+DECLARE
+    json JSON;
 BEGIN
-    RETURN QUERY SELECT * FROM tipo_mao_obra WHERE id = p_id;
+    SELECT json_agg(tipo_mao_obra)
+    INTO json
+    FROM tipo_mao_obra
+	WHERE p_id = tipo_mao_obra.id;
+
+    RETURN json;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
 
 

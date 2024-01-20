@@ -57,13 +57,19 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION readone_fornecedor(p_id INT)
-RETURNS SETOF fornecedor
-LANGUAGE plpgsql
+RETURNS JSON
 AS $$
+DECLARE
+    json JSON;
 BEGIN
-    RETURN QUERY SELECT * FROM fornecedor WHERE id = p_id;
+    SELECT json_agg(fornecedor)
+    INTO json
+    FROM fornecedor
+	WHERE p_id = fornecedor.id;
+
+    RETURN json;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
 
 

@@ -54,13 +54,33 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION readone_componente(p_id INT)
-RETURNS SETOF componente
-LANGUAGE plpgsql
+RETURNS JSON
 AS $$
+DECLARE
+    json JSON;
 BEGIN
-    RETURN QUERY SELECT * FROM componente WHERE id = p_id;
+    SELECT json_agg(componente)
+    INTO json
+    FROM (
+        SELECT
+            componente.*,
+            (
+                SELECT json_agg(tipo_componente)
+                FROM tipo_componente
+                WHERE tipo_componente.id = componente.tipo_id
+            ) tipo_componente,
+            (
+                SELECT json_agg(armazem)
+                FROM armazem
+                WHERE armazem.id = componente.armazem_id
+            ) armazem
+        FROM componente
+	) componente
+	WHERE p_id = componente.id;
+
+    RETURN json;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
 
 
@@ -86,7 +106,7 @@ BEGIN
                 WHERE armazem.id = componente.armazem_id
             ) armazem
         FROM componente
-		) componente;
+	) componente;
 
     RETURN json;
 END;

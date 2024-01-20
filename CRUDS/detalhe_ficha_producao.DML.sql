@@ -1,6 +1,4 @@
-CREATE OR REPLACE PROCEDURE delete_detalhe_ficha_producao(
-    detalhe_id INT
-)
+CREATE OR REPLACE PROCEDURE delete_detalhe_ficha_producao(detalhe_id INT)
 LANGUAGE plpgsql
 AS $$
 BEGIN
@@ -52,13 +50,19 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION readone_detalhe_ficha_producao(p_id INT)
-RETURNS SETOF detalhe_ficha_producao
-LANGUAGE plpgsql
+RETURNS JSON
 AS $$
+DECLARE
+    json JSON;
 BEGIN
-    RETURN QUERY SELECT * FROM detalhe_ficha_producao WHERE id = p_id;
+    SELECT json_agg(detalhe_ficha_producao)
+    INTO json
+    FROM detalhe_ficha_producao
+	WHERE p_id = detalhe_ficha_producao.id;
+
+    RETURN json;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
 
 

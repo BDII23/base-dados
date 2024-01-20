@@ -1,38 +1,35 @@
-CREATE OR REPLACE FUNCTION delete_detalhe_encomenda_fornecedor(p_id INT)
-RETURNS VOID AS $$
+CREATE OR REPLACE PROCEDURE delete_detalhe_encomenda_fornecedor(p_id INT)
+LANGUAGE plpgsql
+AS $$
 BEGIN
     DELETE FROM detalhe_encomenda_fornecedor WHERE id = p_id;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 
-CREATE OR REPLACE FUNCTION create_detalhe_encomenda_fornecedor(
+CREATE OR REPLACE PROCEDURE create_detalhe_encomenda_fornecedor(
     p_quantidade INT,
     p_custo_entidade MONEY,
     p_componente_id INT,
     p_encomenda_id INT
 )
-RETURNS VOID AS $$
+AS $$
 BEGIN
-    INSERT INTO detalhe_encomenda_fornecedor(
-        quantidade, custo_entidade, componente_id, encomenda_id
-    ) VALUES (
-        p_quantidade, p_custo_entidade, p_componente_id, p_encomenda_id
-    );
+    INSERT INTO detalhe_encomenda_fornecedor(quantidade, custo_entidade, componente_id, encomenda_id)
+    VALUES (p_quantidade, p_custo_entidade, p_componente_id, p_encomenda_id);
 END;
 $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION update_detalhe_encomenda_fornecedor(
+CREATE OR REPLACE PROCEDURE update_detalhe_encomenda_fornecedor(
     p_id INT,
     p_quantidade INT,
     p_custo_entidade MONEY,
     p_componente_id INT,
-    p_encomenda_id INT
-)
-RETURNS VOID AS $$
+    p_encomenda_id INT)
+AS $$
 BEGIN
     UPDATE detalhe_encomenda_fornecedor
     SET
@@ -58,13 +55,19 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION readone_detalhe_encomenda_fornecedor(p_id INT)
-RETURNS SETOF detalhe_encomenda_fornecedor
-LANGUAGE plpgsql
+RETURNS JSON
 AS $$
+DECLARE
+    json JSON;
 BEGIN
-    RETURN QUERY SELECT * FROM detalhe_encomenda_fornecedor WHERE id = p_id;
+    SELECT json_agg(detalhe_encomenda_fornecedor)
+    INTO json
+    FROM detalhe_encomenda_fornecedor
+	WHERE p_id = detalhe_encomenda_fornecedor.id;
+
+    RETURN json;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
 
 

@@ -30,9 +30,7 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE PROCEDURE delete_cliente(
-    IN p_id INT
-)
+CREATE OR REPLACE PROCEDURE delete_cliente(IN p_id INT)
 AS $$
 BEGIN
     DELETE FROM cliente WHERE id = p_id;
@@ -53,13 +51,19 @@ $$;
 
 
 CREATE OR REPLACE FUNCTION readone_cliente(p_id INT)
-RETURNS SETOF cliente
-LANGUAGE plpgsql
+RETURNS JSON
 AS $$
+DECLARE
+    json JSON;
 BEGIN
-    RETURN QUERY SELECT * FROM cliente WHERE id = p_id;
+    SELECT json_agg(cliente)
+    INTO json
+    FROM cliente
+	WHERE p_id = cliente.id;
+
+    RETURN json;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
 
 
