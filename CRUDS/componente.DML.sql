@@ -75,8 +75,8 @@ BEGIN
                 WHERE armazem.id = componente.armazem_id
             ) armazem
         FROM componente
-	) componente
-	WHERE p_id = componente.id;
+	    WHERE p_id = componente.id
+	) componente;
 
     RETURN json;
 END;
