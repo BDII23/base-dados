@@ -9,14 +9,13 @@ $$;
 
 
 CREATE OR REPLACE PROCEDURE create_detalhe_ficha_producao(
-    p_descricao TEXT,
     p_componente_id INT
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    INSERT INTO detalhe_ficha_producao (descricao, componente_id)
-    VALUES (p_descricao, p_componente_id);
+    INSERT INTO detalhe_ficha_producao (componente_id)
+    VALUES (p_componente_id);
 END;
 $$;
 
@@ -24,14 +23,13 @@ $$;
 
 CREATE OR REPLACE PROCEDURE update_detalhe_ficha_producao(
     p_detalhe_id INT,
-    p_descricao TEXT,
     p_componente_id INT
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
     UPDATE detalhe_ficha_producao
-    SET descricao = p_descricao, componente_id = p_componente_id
+    SET componente_id = p_componente_id
     WHERE id = p_detalhe_id;
 END;
 $$;

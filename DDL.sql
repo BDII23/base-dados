@@ -134,8 +134,6 @@ CREATE TABLE detalhe_ficha_producao(
 	id											SERIAL				NOT NULL,
 	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
 
-	descricao									TEXT,
-
 	componente_id								INT					NOT NULL,
 	ficha_producao_id							INT					NOT NULL,
 	
