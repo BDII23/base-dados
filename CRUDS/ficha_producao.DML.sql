@@ -90,7 +90,134 @@ $$ LANGUAGE plpgsql;
 
 
 
+CREATE OR REPLACE FUNCTION readonejson_ficha_producao(_ficha_producao_id INT)
+RETURNS JSON
+AS $$
+DECLARE
+    json JSON;
+BEGIN
+    SELECT json_agg(ficha_producao)
+    INTO json
+    FROM (
+        SELECT ficha_producao.*,
+            (
+                SELECT json_agg(detalhe_ficha_producao)
+                FROM (
+                    SELECT detalhe_ficha_producao.*,
+                        (
+                            SELECT json_agg(componente)
+                            FROM (
+                                SELECT componente.*,
+                                    (
+                                        SELECT json_agg(tipo_componente)
+                                        FROM tipo_componente
+                                        WHERE tipo_componente.id = componente.tipo_id
+                                    ) tipo_componente,
+                                    (
+                                        SELECT json_agg(armazem)
+                                        FROM armazem
+                                        WHERE armazem.id = componente.armazem_id
+                                    ) armazem
+                                FROM componente
+                            ) componente
+                            WHERE componente.id = detalhe_ficha_producao.componente_id
+                        ) componente
+                    FROM detalhe_ficha_producao
+                    WHERE detalhe_ficha_producao.ficha_producao_id = ficha_producao.id
+                ) detalhe_ficha_producao
+            ) detalhe_ficha_producao,
+            (
+                SELECT json_agg(equipamento)
+                FROM (
+                    SELECT equipamento.*,
+                        (
+                            SELECT json_agg(tipo_equipamento)
+                            FROM tipo_equipamento
+                            WHERE tipo_equipamento.id = equipamento.tipo_id
+                        ) tipo_equipamento
+                    FROM equipamento
+                    WHERE equipamento.id = ficha_producao.equipamento_id
+                ) equipamento
+            ) equipamento,
+            (
+                SELECT json_agg(tipo_mao_obra)
+                FROM tipo_mao_obra
+                WHERE tipo_mao_obra.id = ficha_producao.tipo_mao_obra_id
+            ) tipo_mao_obra
+        FROM ficha_producao
+		WHERE ficha_producao.id = _ficha_producao_id
+    ) ficha_producao;
+
+    RETURN json;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
 CREATE OR REPLACE FUNCTION readjson_ficha_producao()
+RETURNS JSON
+AS $$
+DECLARE
+    json JSON;
+BEGIN
+    SELECT json_agg(ficha_producao)
+    INTO json
+    FROM (
+        SELECT ficha_producao.*,
+            (
+                SELECT json_agg(detalhe_ficha_producao)
+                FROM (
+                    SELECT detalhe_ficha_producao.*,
+                        (
+                            SELECT json_agg(componente)
+                            FROM (
+                                SELECT componente.*,
+                                    (
+                                        SELECT json_agg(tipo_componente)
+                                        FROM tipo_componente
+                                        WHERE tipo_componente.id = componente.tipo_id
+                                    ) tipo_componente,
+                                    (
+                                        SELECT json_agg(armazem)
+                                        FROM armazem
+                                        WHERE armazem.id = componente.armazem_id
+                                    ) armazem
+                                FROM componente
+                            ) componente
+                            WHERE componente.id = detalhe_ficha_producao.componente_id
+                        ) componente
+                    FROM detalhe_ficha_producao
+                    WHERE detalhe_ficha_producao.ficha_producao_id = ficha_producao.id
+                ) detalhe_ficha_producao
+            ) detalhe_ficha_producao,
+            (
+                SELECT json_agg(equipamento)
+                FROM (
+                    SELECT equipamento.*,
+                        (
+                            SELECT json_agg(tipo_equipamento)
+                            FROM tipo_equipamento
+                            WHERE tipo_equipamento.id = equipamento.tipo_id
+                        ) tipo_equipamento
+                    FROM equipamento
+                    WHERE equipamento.id = ficha_producao.equipamento_id
+                ) equipamento
+            ) equipamento,
+            (
+                SELECT json_agg(tipo_mao_obra)
+                FROM tipo_mao_obra
+                WHERE tipo_mao_obra.id = ficha_producao.tipo_mao_obra_id
+            ) tipo_mao_obra
+        FROM ficha_producao
+    ) ficha_producao;
+
+    RETURN json;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION readjson_ficha_producao_OLD()
 RETURNS JSON
 AS $$
 DECLARE
