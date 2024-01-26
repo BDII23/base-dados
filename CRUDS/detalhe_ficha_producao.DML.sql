@@ -8,28 +8,23 @@ $$;
 
 
 
-CREATE OR REPLACE PROCEDURE create_detalhe_ficha_producao(
-    p_componente_id INT
-)
+CREATE OR REPLACE PROCEDURE create_detalhe_ficha_producao(p_componente_id INT, p_ficha_producao_id INT)
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    INSERT INTO detalhe_ficha_producao (componente_id)
-    VALUES (p_componente_id);
+    INSERT INTO detalhe_ficha_producao (componente_id, ficha_producao_id)
+    VALUES (p_componente_id, p_ficha_producao_id);
 END;
 $$;
 
 
 
-CREATE OR REPLACE PROCEDURE update_detalhe_ficha_producao(
-    p_detalhe_id INT,
-    p_componente_id INT
-)
+CREATE OR REPLACE PROCEDURE update_detalhe_ficha_producao(p_detalhe_id INT, p_componente_id INT, p_ficha_producao_id INT)
 LANGUAGE plpgsql
 AS $$
 BEGIN
     UPDATE detalhe_ficha_producao
-    SET componente_id = p_componente_id
+    SET componente_id = p_componente_id, ficha_producao_id = p_ficha_producao_id
     WHERE id = p_detalhe_id;
 END;
 $$;

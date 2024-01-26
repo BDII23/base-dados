@@ -9,13 +9,12 @@ $$;
 
 
 CREATE OR REPLACE PROCEDURE create_equipamento(
-    in_descricao TEXT,
     in_tipo_id INT
 )
 AS $$
 BEGIN
-    INSERT INTO equipamento (descricao, tipo_id) 
-    VALUES (in_descricao, in_tipo_id);
+    INSERT INTO equipamento (tipo_id) 
+    VALUES (in_tipo_id);
 END;
 $$ LANGUAGE plpgsql;
 
@@ -23,11 +22,10 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE PROCEDURE update_equipamento(
     in_id INT,
-    in_descricao TEXT,
     in_tipo_id INT)
 AS $$
 BEGIN
-    UPDATE equipamento SET descricao = in_descricao, tipo_id = in_tipo_id WHERE id = in_id;
+    UPDATE equipamento SET tipo_id = in_tipo_id WHERE id = in_id;
 END;
 $$ LANGUAGE plpgsql;
 

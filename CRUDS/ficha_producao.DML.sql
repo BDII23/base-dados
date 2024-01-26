@@ -4,25 +4,24 @@ CREATE OR REPLACE PROCEDURE create_ficha_producao(
     horas INT,
     utilizador_id INT,
     tipo_mao_obra_id INT,
-    equipamento_id INT
+	tipo_equipamento_id INT,
+	componentes INT[]
 )
 AS $$
+DECLARE
+	ID_AUX INT;
 BEGIN
-    INSERT INTO ficha_producao(
-        quantidade_equipamentos,
-        descricao,
-        horas,
-        utilizador_id,
-        tipo_mao_obra_id,
-        equipamento_id
-    ) VALUES (
-        quantidade_equipamentos,
-        descricao,
-        horas,
-        utilizador_id,
-        tipo_mao_obra_id,
-        equipamento_id
-    );
+	INSERT INTO equipamento(tipo_id)
+	VALUES (tipo_equipamento_id)
+	RETURNING id INTO ID_AUX;
+
+    INSERT INTO ficha_producao(quantidade_equipamentos, descricao, horas, utilizador_id, tipo_mao_obra_id, equipamento_id)
+	VALUES (quantidade_equipamentos, descricao, horas, utilizador_id, tipo_mao_obra_id, ID_AUX)
+	RETURNING id INTO ID_AUX;
+
+    FOR i IN 1..array_length(componentes, 1) LOOP
+        CALL create_detalhe_ficha_producao(componentes[i], ID_AUX);
+    END LOOP;
 END;
 $$ LANGUAGE plpgsql;
 

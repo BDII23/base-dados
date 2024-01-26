@@ -62,7 +62,6 @@ CREATE TABLE equipamento(
 	id											SERIAL				NOT NULL,
 	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
 
-	descricao									TEXT				NOT NULL,
 	tipo_id										INT					NOT NULL,
 
 	CONSTRAINT pk_equipamento PRIMARY KEY (id),
@@ -190,7 +189,6 @@ CREATE TABLE detalhe_encomenda_cliente(
 	id											SERIAL				NOT NULL,
 	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
 
-	quantidade									INT					NOT NULL	DEFAULT (0),
 	custo_unidade								MONEY				NOT NULL,
 
 	equipamento_id								INT					NOT NULL,
