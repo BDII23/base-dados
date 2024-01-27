@@ -28,24 +28,53 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE PROCEDURE update_ficha_producao(
-    ficha_id INT,
-    quantidade_equipamentos INT,
-    descricao TEXT,
-    horas INT,
-    utilizador_id INT,
-    tipo_mao_obra_id INT,
-    equipamento_id INT)
+    _ficha_id INT,
+    _quantidade_equipamentos INT,
+    _descricao TEXT,
+    _horas INT,
+    _utilizador_id INT,
+    _tipo_mao_obra_id INT,
+    _tipo_equipamento_id INT,
+    _componentes INT[])
 AS $$
+DECLARE
+    ID_AUX INT;
 BEGIN
     UPDATE ficha_producao
     SET
-        quantidade_equipamentos = quantidade_equipamentos,
-        descricao = descricao,
-        horas = horas,
-        utilizador_id = utilizador_id,
-        tipo_mao_obra_id = tipo_mao_obra_id,
-        equipamento_id = equipamento_id
-    WHERE id = ficha_id;
+        quantidade_equipamentos = _quantidade_equipamentos,
+        descricao = _descricao,
+        horas = _horas,
+        utilizador_id = _utilizador_id,
+        tipo_mao_obra_id = _tipo_mao_obra_id
+    WHERE id = _ficha_id
+	RETURNING equipamento_id INTO ID_AUX;
+
+    UPDATE equipamento
+    SET tipo_id = _tipo_equipamento_id
+    WHERE id = ID_AUX;
+
+	FOR ID_AUX IN (
+		SELECT componente_id 
+		FROM detalhe_ficha_producao 
+		WHERE ficha_producao_id = _ficha_id
+	) LOOP
+        IF ID_AUX NOT IN (SELECT UNNEST(_componentes)) THEN
+            DELETE FROM detalhe_ficha_producao WHERE ficha_producao_id = _ficha_id AND componente_id = ID_AUX;
+        END IF;
+    END LOOP;
+
+    FOR i IN 1..array_length(_componentes, 1) LOOP
+        SELECT componente_id INTO ID_AUX
+        FROM detalhe_ficha_producao
+        WHERE componente_id = _componentes[i] AND ficha_producao_id = _ficha_id;
+	
+    	--RAISE NOTICE 'ID_AUX: %', ID_AUX;
+        IF ID_AUX IS NULL THEN
+            INSERT INTO detalhe_ficha_producao(componente_id, ficha_producao_id)
+            VALUES (_componentes[i], _ficha_id);
+        END IF;
+    END LOOP;
 END;
 $$ LANGUAGE plpgsql;
 
