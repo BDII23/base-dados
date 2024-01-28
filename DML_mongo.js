@@ -10,7 +10,7 @@ db.createCollection("equipamento_producao", {
             equipamento_producao_id: {
                bsonType: "int",
             },
-            detalhe: {
+            detalhes: {
                bsonType: "object",
             },
          },

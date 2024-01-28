@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE sp_create_utilizador_perfil(
+CREATE OR REPLACE PROCEDURE create_utilizador_perfil(
     p_perfil VARCHAR(100)
 )
 AS $$

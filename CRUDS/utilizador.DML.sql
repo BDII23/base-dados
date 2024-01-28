@@ -1,3 +1,41 @@
+CREATE OR REPLACE FUNCTION login_utilizador(_email VARCHAR, _senha VARCHAR)
+RETURNS TABLE (
+    existe BOOLEAN,
+	id INT,
+    nome VARCHAR,
+    sobrenome VARCHAR,
+    email VARCHAR,
+    perfil VARCHAR
+) AS $$
+BEGIN
+    SELECT
+        TRUE,
+		ut.id,
+        ut.nome,
+        ut.sobrenome,
+        ut.email,
+        up.perfil
+    INTO 
+        existe,
+		id,
+        nome,
+        sobrenome,
+        email,
+        perfil
+    FROM utilizador ut
+    JOIN utilizador_perfil up ON up.id = ut.perfil_id
+    WHERE ut.email = _email AND ut.senha = _senha;
+
+    IF NOT FOUND THEN
+        existe := FALSE;
+    END IF;
+
+    RETURN NEXT;
+END;
+$$ LANGUAGE plpgsql
+
+
+
 CREATE OR REPLACE PROCEDURE delete_utilizador(p_id INT)
 LANGUAGE plpgsql
 AS $$
