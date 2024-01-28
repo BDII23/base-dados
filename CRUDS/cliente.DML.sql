@@ -16,14 +16,13 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE PROCEDURE update_cliente(
     IN p_id INT,
     IN p_email VARCHAR(500),
-    IN p_senha VARCHAR(400),
     IN p_nome VARCHAR(300),
     IN p_nif CHAR(9)
 )
 AS $$
 BEGIN
     UPDATE cliente
-    SET email = p_email, senha = p_senha, nome = p_nome, nif = p_nif
+    SET email = p_email, nome = p_nome, nif = p_nif
     WHERE id = p_id;
 END;
 $$ LANGUAGE plpgsql;

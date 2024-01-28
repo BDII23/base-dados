@@ -82,9 +82,18 @@ AS $$
 DECLARE
     json JSON;
 BEGIN
-    SELECT array_to_json(array_agg(row_to_json(row)))
+    SELECT json_agg(utilizador)
     INTO json
-    FROM (SELECT * FROM utilizador) row;
+    FROM (
+        SELECT
+            utilizador.*,
+            (
+                SELECT json_agg(utilizador_perfil)
+                FROM utilizador_perfil
+                WHERE utilizador_perfil.id = utilizador.perfil_id
+            ) utilizador_perfil
+        FROM utilizador
+	) utilizador;
 
     RETURN json;
 END;
