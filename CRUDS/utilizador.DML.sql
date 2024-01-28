@@ -28,7 +28,6 @@ $$;
 CREATE OR REPLACE PROCEDURE update_utilizador(
     p_id INT,
     p_email VARCHAR(500),
-    p_senha VARCHAR(400),
     p_nome VARCHAR(300),
     p_sobrenome VARCHAR(300),
     p_perfil_id INT
@@ -38,7 +37,6 @@ AS $$
 BEGIN
     UPDATE utilizador
     SET email = p_email,
-        senha = p_senha,
         nome = p_nome,
         sobrenome = p_sobrenome,
         perfil_id = p_perfil_id
