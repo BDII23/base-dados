@@ -17,10 +17,10 @@ INSERT INTO tipo_equipamento (tipo) VALUES
   ('Máquina CNC');
 
 -- Equipamento
-INSERT INTO equipamento (descricao, tipo_id) VALUES
-  ('Dell XPS 13', 1),
-  ('Creality Ender 3', 2),
-  ('Haas VF-2SS', 3);
+INSERT INTO equipamento (tipo_id) VALUES
+  (1),
+  (2),
+  (3);
 
 -- Tipo_Componente
 INSERT INTO tipo_componente (tipo) VALUES
@@ -62,19 +62,19 @@ INSERT INTO ficha_producao (quantidade_equipamentos, descricao, horas, utilizado
   (200, 'Produção Personalizada', 180, 1, 3, 1);
 
 -- Detalhe_Ficha_Producao
-INSERT INTO detalhe_ficha_producao (descricao, componente_id, ficha_producao_id) VALUES
-  ('Detalhe 1', 1, 1),
-  ('Detalhe 2', 2, 2),
-  ('Detalhe 3', 3, 3),
-  ('Detalhe 4', 4, 1),
-  ('Detalhe 5', 5, 2),
-  ('Detalhe 6', 6, 3),
-  ('Detalhe 7', 7, 1),
-  ('Detalhe 8', 8, 2),
-  ('Detalhe 9', 9, 3),
-  ('Detalhe 10', 10, 1),
-  ('Detalhe 11', 11, 2),
-  ('Detalhe 12', 12, 3);
+INSERT INTO detalhe_ficha_producao (componente_id, ficha_producao_id) VALUES
+  (1, 1),
+  (2, 2),
+  (3, 3),
+  (4, 1),
+  (5, 2),
+  (6, 3),
+  (7, 1),
+  (8, 2),
+  (9, 3),
+  (10, 1),
+  (11, 2),
+  (12, 3);
 
 -- Estado_Encomenda
 INSERT INTO estado_encomenda (estado) VALUES

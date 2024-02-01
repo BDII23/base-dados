@@ -32,7 +32,7 @@ BEGIN
 
     RETURN NEXT;
 END;
-$$ LANGUAGE plpgsql
+$$ LANGUAGE plpgsql;
 
 
 

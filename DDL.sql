@@ -189,6 +189,7 @@ CREATE TABLE detalhe_encomenda_cliente(
 	id											SERIAL				NOT NULL,
 	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
 
+	quantidade									INT					NOT NULL	DEFAULT (0),
 	custo_unidade								MONEY				NOT NULL,
 
 	equipamento_id								INT					NOT NULL,
