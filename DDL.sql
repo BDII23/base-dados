@@ -14,7 +14,6 @@ DROP TABLE IF EXISTS encomenda_cliente CASCADE;
 DROP TABLE IF EXISTS detalhe_encomenda_cliente CASCADE;
 DROP TABLE IF EXISTS detalhe_remessa_cliente CASCADE;
 DROP TABLE IF EXISTS fatura_cliente CASCADE;
-DROP TABLE IF EXISTS estado_guia_remessa CASCADE;
 DROP TABLE IF EXISTS guia_remessa_cliente CASCADE;
 DROP TABLE IF EXISTS fatura_fornecedor CASCADE;
 DROP TABLE IF EXISTS fornecedor CASCADE;
@@ -201,15 +200,6 @@ CREATE TABLE detalhe_encomenda_cliente(
 	CONSTRAINT fk_encomenda__detalhe_encomenda_cliente FOREIGN KEY (encomenda_id) REFERENCES encomenda_cliente (id)
 );
 
-CREATE TABLE estado_guia_remessa(
-	id											SERIAL				NOT NULL,
-	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
-
-	estado										VARCHAR(100)		NOT NULL,
-
-	CONSTRAINT pk_estado_guia_remessa PRIMARY KEY (id)
-);
-
 CREATE TABLE guia_remessa_cliente(
 	id											SERIAL				NOT NULL,
 	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
@@ -219,13 +209,11 @@ CREATE TABLE guia_remessa_cliente(
 	endereco_origem								VARCHAR(300)		NOT NULL,
 	endereco_chegada							VARCHAR(300)		NOT NULL,
 
-	estado_id									INT					NOT NULL,
 	detalhe_encomenda_id						INT					NOT NULL,
 	utilizador_id								INT					NOT NULL,
 	fatura_id									INT					NOT NULL,
 
 	CONSTRAINT pk_guia_remessa_cliente PRIMARY KEY (id),
-	CONSTRAINT fk_estado__guia_remessa_cliente FOREIGN KEY (estado_id) REFERENCES estado_guia_remessa (id),
 	CONSTRAINT fk_detalhe_encomenda__guia_remessa_cliente FOREIGN KEY (detalhe_encomenda_id) REFERENCES detalhe_encomenda_cliente (id),
 	CONSTRAINT fk_utilizador__guia_remessa_cliente FOREIGN KEY (utilizador_id) REFERENCES utilizador (id),
 	CONSTRAINT fk_fatura__guia_remessa_cliente FOREIGN KEY (fatura_id) REFERENCES fatura_cliente (id)
@@ -304,13 +292,11 @@ CREATE TABLE guia_remessa_fornecedor(
 	endereco_origem								VARCHAR(300)		NOT NULL,
 	endereco_chegada							VARCHAR(300)		NOT NULL,
 
-	estado_id									INT					NOT NULL,
 	detalhe_encomenda_id						INT					NOT NULL,
 	utilizador_id								INT					NOT NULL,
 	fatura_id									INT					NOT NULL,
 
 	CONSTRAINT pk_guia_remessa_fornecedor PRIMARY KEY (id),
-	CONSTRAINT fk_estado__guia_remessa_fornecedor FOREIGN KEY (estado_id) REFERENCES estado_guia_remessa (id),
 	CONSTRAINT fk_detalhe_encomenda__guia_remessa_fornecedor FOREIGN KEY (detalhe_encomenda_id) REFERENCES detalhe_encomenda_fornecedor (id),
 	CONSTRAINT fk_utilizador__guia_remessa_fornecedor FOREIGN KEY (utilizador_id) REFERENCES utilizador (id),
 	CONSTRAINT fk_fatura__encomenda_cliente FOREIGN KEY (fatura_id) REFERENCES fatura_cliente (id)
