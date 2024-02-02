@@ -62,6 +62,7 @@ CREATE TABLE equipamento(
 	id											SERIAL				NOT NULL,
 	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
 
+	quantidade									INT,
 	tipo_id										INT					NOT NULL,
 
 	CONSTRAINT pk_equipamento PRIMARY KEY (id),
@@ -299,8 +300,7 @@ CREATE TABLE guia_remessa_fornecedor(
 	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
 
 	data_envio									TIMESTAMP			NOT NULL,
-	data_entrega						TIMESTAMP			NOT NULL,
-	data_recebida								TIMESTAMP,
+	data_entrega								TIMESTAMP,
 	endereco_origem								VARCHAR(300)		NOT NULL,
 	endereco_chegada							VARCHAR(300)		NOT NULL,
 
