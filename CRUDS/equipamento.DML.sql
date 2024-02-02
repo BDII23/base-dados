@@ -50,7 +50,16 @@ DECLARE
 BEGIN
     SELECT json_agg(equipamento)
     INTO json
-    FROM equipamento
+    FROM (
+		SELECT
+			equipamento.*,
+			(
+				SELECT json_agg(tipo_equipamento)
+				FROM tipo_equipamento
+				WHERE equipamento.tipo_id = tipo_equipamento.id
+			) tipo_equipamento
+		FROM equipamento
+	) equipamento
 	WHERE p_id = equipamento.id;
 
     RETURN json;
