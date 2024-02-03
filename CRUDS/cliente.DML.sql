@@ -38,17 +38,6 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION read_cliente()
-RETURNS SETOF cliente
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM cliente;
-END;
-$$;
-
-
-
 CREATE OR REPLACE FUNCTION readone_cliente(p_id INT)
 RETURNS JSON
 AS $$

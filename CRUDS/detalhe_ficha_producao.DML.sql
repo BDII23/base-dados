@@ -31,17 +31,6 @@ $$;
 
 
 
-CREATE OR REPLACE FUNCTION read_detalhe_ficha_producao()
-RETURNS SETOF detalhe_ficha_producao
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM detalhe_ficha_producao;
-END;
-$$;
-
-
-
 CREATE OR REPLACE FUNCTION readone_detalhe_ficha_producao(p_id INT)
 RETURNS JSON
 AS $$

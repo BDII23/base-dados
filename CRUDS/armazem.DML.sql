@@ -28,17 +28,6 @@ $$;
 
 
 
-CREATE OR REPLACE FUNCTION read_armazem()
-RETURNS SETOF armazem
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM armazem;
-END;
-$$;
-
-
-
 CREATE OR REPLACE FUNCTION readone_armazem(p_id INT)
 RETURNS JSON
 AS $$

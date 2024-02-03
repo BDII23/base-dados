@@ -70,17 +70,6 @@ $$;
 
 
 
-CREATE OR REPLACE FUNCTION read_guia_remessa_fornecedor()
-RETURNS SETOF guia_remessa_fornecedor
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM guia_remessa_fornecedor;
-END;
-$$;
-
-
-
 CREATE OR REPLACE FUNCTION readone_guia_remessa_fornecedor(p_id INT)
 RETURNS JSON
 AS $$

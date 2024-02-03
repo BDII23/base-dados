@@ -40,17 +40,6 @@ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION read_tipo_mao_obra()
-RETURNS SETOF tipo_mao_obra
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM tipo_mao_obra;
-END;
-$$;
-
-
-
 CREATE OR REPLACE FUNCTION readone_tipo_mao_obra(p_id INT)
 RETURNS JSON
 AS $$

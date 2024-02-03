@@ -33,17 +33,6 @@ $$;
 
 
 
-CREATE OR REPLACE FUNCTION read_tipo_componente()
-RETURNS SETOF tipo_componente
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM tipo_componente;
-END;
-$$;
-
-
-
 CREATE OR REPLACE FUNCTION readone_tipo_componente(p_id INT)
 RETURNS JSON
 AS $$

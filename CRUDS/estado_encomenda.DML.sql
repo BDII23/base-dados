@@ -35,17 +35,6 @@ $$;
 
 
 
-CREATE OR REPLACE FUNCTION read_estado_encomenda()
-RETURNS SETOF estado_encomenda
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM estado_encomenda;
-END;
-$$;
-
-
-
 CREATE OR REPLACE FUNCTION readone_estado_encomenda(p_id INT)
 RETURNS JSON
 AS $$

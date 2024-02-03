@@ -44,17 +44,6 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION read_encomenda_cliente()
-RETURNS SETOF encomenda_cliente
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM encomenda_cliente;
-END;
-$$;
-
-
-
 CREATE OR REPLACE FUNCTION readone_encomenda_cliente(p_id INT)
 RETURNS JSON
 AS $$

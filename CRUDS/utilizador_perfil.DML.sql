@@ -33,17 +33,6 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION read_utilizador_perfil()
-RETURNS SETOF utilizador_perfil
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM utilizador_perfil;
-END;
-$$;
-
-
-
 CREATE OR REPLACE FUNCTION readone_utilizador_perfil(p_id INT)
 RETURNS JSON
 AS $$

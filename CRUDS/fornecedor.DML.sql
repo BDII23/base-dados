@@ -45,17 +45,6 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION read_fornecedor()
-RETURNS SETOF fornecedor
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM fornecedor;
-END;
-$$;
-
-
-
 CREATE OR REPLACE FUNCTION readone_fornecedor(p_id INT)
 RETURNS JSON
 AS $$

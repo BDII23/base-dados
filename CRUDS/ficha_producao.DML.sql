@@ -104,24 +104,7 @@ $$;
 
 
 
-CREATE OR REPLACE FUNCTION readone_ficha_producao(p_id INT)
-RETURNS JSON
-AS $$
-DECLARE
-    json JSON;
-BEGIN
-    SELECT json_agg(ficha_producao)
-    INTO json
-    FROM ficha_producao
-	WHERE p_id = ficha_producao.id;
-
-    RETURN json;
-END;
-$$ LANGUAGE plpgsql;
-
-
-
-CREATE OR REPLACE FUNCTION readonejson_ficha_producao(_ficha_producao_id INT)
+CREATE OR REPLACE FUNCTION readone_ficha_producao(_ficha_producao_id INT)
 RETURNS JSON
 AS $$
 DECLARE
@@ -241,22 +224,6 @@ BEGIN
             ) tipo_mao_obra
         FROM ficha_producao
     ) ficha_producao;
-
-    RETURN json;
-END;
-$$ LANGUAGE plpgsql;
-
-
-
-CREATE OR REPLACE FUNCTION readjson_ficha_producao_OLD()
-RETURNS JSON
-AS $$
-DECLARE
-    json JSON;
-BEGIN
-    SELECT array_to_json(array_agg(row_to_json(row)))
-    INTO json
-    FROM (SELECT * FROM ficha_producao) row;
 
     RETURN json;
 END;

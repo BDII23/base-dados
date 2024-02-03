@@ -84,17 +84,6 @@ $$;
 
 
 
-CREATE OR REPLACE FUNCTION read_utilizador()
-RETURNS SETOF utilizador
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM utilizador;
-END;
-$$;
-
-
-
 CREATE OR REPLACE FUNCTION readone_utilizador(p_id INT)
 RETURNS JSON
 AS $$

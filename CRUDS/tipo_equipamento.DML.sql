@@ -28,17 +28,6 @@ $$;
 
 
 
-CREATE OR REPLACE FUNCTION read_tipo_equipamento()
-RETURNS SETOF tipo_equipamento
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM tipo_equipamento;
-END;
-$$;
-
-
-
 CREATE OR REPLACE FUNCTION readone_tipo_equipamento(p_id INT)
 RETURNS JSON
 AS $$

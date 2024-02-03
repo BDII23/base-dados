@@ -33,17 +33,6 @@ $$;
 
 
 
-CREATE OR REPLACE FUNCTION read_fatura_fornecedor()
-RETURNS SETOF fatura_fornecedor
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM fatura_fornecedor;
-END;
-$$;
-
-
-
 CREATE OR REPLACE FUNCTION readone_fatura_fornecedor(p_id INT)
 RETURNS JSON
 AS $$

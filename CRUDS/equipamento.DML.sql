@@ -31,17 +31,6 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION read_equipamento()
-RETURNS SETOF equipamento
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM equipamento;
-END;
-$$;
-
-
-
 CREATE OR REPLACE FUNCTION readone_equipamento(p_id INT)
 RETURNS JSON
 AS $$

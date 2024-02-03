@@ -42,17 +42,6 @@ $$ LANGUAGE plpgsql;
 
 
 
-CREATE OR REPLACE FUNCTION read_componente()
-RETURNS SETOF componente
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY SELECT * FROM componente;
-END;
-$$;
-
-
-
 CREATE OR REPLACE FUNCTION readone_componente(p_id INT)
 RETURNS JSON
 AS $$
