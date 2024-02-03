@@ -177,7 +177,7 @@ CREATE TABLE encomenda_cliente(
 	id											SERIAL				NOT NULL,
 	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
 
-	estado_id									INT					NOT NULL,
+	estado_id									INT					NOT NULL	DEFAULT (1),
 	cliente_id									INT					NOT NULL,
 
 	CONSTRAINT pk_encomenda_cliente PRIMARY KEY (id),
@@ -189,7 +189,7 @@ CREATE TABLE detalhe_encomenda_cliente(
 	id											SERIAL				NOT NULL,
 	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
 
-	quantidade									INT					NOT NULL	DEFAULT (0),
+	quantidade									INT					NOT NULL	DEFAULT (1),
 	custo_unidade								MONEY				NOT NULL,
 
 	equipamento_id								INT					NOT NULL,
@@ -209,12 +209,10 @@ CREATE TABLE guia_remessa_cliente(
 	endereco_origem								VARCHAR(300)		NOT NULL,
 	endereco_chegada							VARCHAR(300)		NOT NULL,
 
-	detalhe_encomenda_id						INT					NOT NULL,
 	utilizador_id								INT					NOT NULL,
 	fatura_id									INT					NOT NULL,
 
 	CONSTRAINT pk_guia_remessa_cliente PRIMARY KEY (id),
-	CONSTRAINT fk_detalhe_encomenda__guia_remessa_cliente FOREIGN KEY (detalhe_encomenda_id) REFERENCES detalhe_encomenda_cliente (id),
 	CONSTRAINT fk_utilizador__guia_remessa_cliente FOREIGN KEY (utilizador_id) REFERENCES utilizador (id),
 	CONSTRAINT fk_fatura__guia_remessa_cliente FOREIGN KEY (fatura_id) REFERENCES fatura_cliente (id)
 );
@@ -223,7 +221,7 @@ CREATE TABLE detalhe_remessa_cliente(
 	id											SERIAL				NOT NULL,
 	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
 
-	quantidade									INT					NOT NULL	DEFAULT (0),
+	quantidade									INT					NOT NULL	DEFAULT (1),
 
 	detalhe_encomenda_id						INT					NOT NULL,
 	remessa_id									INT					NOT NULL,
@@ -260,7 +258,7 @@ CREATE TABLE encomenda_fornecedor(
 	id											SERIAL				NOT NULL,
 	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
 
-	estado_id									INT					NOT NULL,
+	estado_id									INT					NOT NULL	DEFAULT (1),
 	fornecedor_id								INT					NOT NULL,
 
 	CONSTRAINT pk_encomenda_fornecedor PRIMARY KEY (id),
@@ -272,7 +270,7 @@ CREATE TABLE detalhe_encomenda_fornecedor(
 	id											SERIAL				NOT NULL,
 	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
 
-	quantidade									INT					NOT NULL	DEFAULT (0),
+	quantidade									INT					NOT NULL	DEFAULT (1),
 	custo_entidade								MONEY				NOT NULL,
 
 	componente_id								INT					NOT NULL,
@@ -292,12 +290,10 @@ CREATE TABLE guia_remessa_fornecedor(
 	endereco_origem								VARCHAR(300)		NOT NULL,
 	endereco_chegada							VARCHAR(300)		NOT NULL,
 
-	detalhe_encomenda_id						INT					NOT NULL,
 	utilizador_id								INT					NOT NULL,
 	fatura_id									INT					NOT NULL,
 
 	CONSTRAINT pk_guia_remessa_fornecedor PRIMARY KEY (id),
-	CONSTRAINT fk_detalhe_encomenda__guia_remessa_fornecedor FOREIGN KEY (detalhe_encomenda_id) REFERENCES detalhe_encomenda_fornecedor (id),
 	CONSTRAINT fk_utilizador__guia_remessa_fornecedor FOREIGN KEY (utilizador_id) REFERENCES utilizador (id),
 	CONSTRAINT fk_fatura__encomenda_cliente FOREIGN KEY (fatura_id) REFERENCES fatura_cliente (id)
 );
@@ -306,7 +302,7 @@ CREATE TABLE detalhe_remessa_fornecedor(
 	id											SERIAL				NOT NULL,
 	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
 
-	quantidade									INT					NOT NULL	DEFAULT (0),
+	quantidade									INT					NOT NULL	DEFAULT (1),
 
 	detalhe_encomenda_id						INT					NOT NULL,
 	remessa_id									INT					NOT NULL,
