@@ -8,13 +8,19 @@ $$;
 
 
 
-CREATE OR REPLACE PROCEDURE create_equipamento(
+CREATE OR REPLACE FUNCTION create_equipamento(
     in_tipo_id INT
 )
+RETURNS INT
 AS $$
+DECLARE
+	ID_AUX INT;
 BEGIN
     INSERT INTO equipamento (tipo_id) 
-    VALUES (in_tipo_id);
+    VALUES (in_tipo_id)
+	RETURNING id INTO ID_AUX;
+
+	RETURN ID_AUX;
 END;
 $$ LANGUAGE plpgsql;
 

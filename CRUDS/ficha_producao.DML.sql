@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE create_ficha_producao(
+CREATE OR REPLACE FUNCTION create_ficha_producao(
     quantidade_equipamentos INT,
     descricao TEXT,
     horas INT,
@@ -7,30 +7,31 @@ CREATE OR REPLACE PROCEDURE create_ficha_producao(
     tipo_equipamento_id INT,
     componentes INT[]
 )
+RETURNS INT
 AS $$
 DECLARE
     ID_AUX INT;
+	_equipamento_id INT;
 BEGIN
     INSERT INTO equipamento(tipo_id)
     VALUES (tipo_equipamento_id)
-    RETURNING id INTO ID_AUX;
+    RETURNING id INTO _equipamento_id;
 
     INSERT INTO ficha_producao(quantidade_equipamentos, descricao, horas, utilizador_id, tipo_mao_obra_id, equipamento_id)
-    VALUES (quantidade_equipamentos, descricao, horas, utilizador_id, tipo_mao_obra_id, ID_AUX)
+    VALUES (quantidade_equipamentos, descricao, horas, utilizador_id, tipo_mao_obra_id, _equipamento_id)
     RETURNING id INTO ID_AUX;
 
     FOR i IN 1..array_length(componentes, 1) LOOP
         CALL create_detalhe_ficha_producao(componentes[i], ID_AUX);
     END LOOP;
 
-    RETURN ID_AUX;
+    RETURN _equipamento_id;
 END;
 $$ LANGUAGE plpgsql;
 
 
 
-
-CREATE OR REPLACE PROCEDURE update_ficha_producao(
+CREATE OR REPLACE FUNCTION update_ficha_producao(
     _ficha_id INT,
     _quantidade_equipamentos INT,
     _descricao TEXT,
@@ -39,9 +40,11 @@ CREATE OR REPLACE PROCEDURE update_ficha_producao(
     _tipo_mao_obra_id INT,
     _tipo_equipamento_id INT,
     _componentes INT[])
+RETURNS INT
 AS $$
 DECLARE
     ID_AUX INT;
+	_equipamento_id INT;
 BEGIN
     UPDATE ficha_producao
     SET
@@ -52,6 +55,10 @@ BEGIN
         tipo_mao_obra_id = _tipo_mao_obra_id
     WHERE id = _ficha_id
 	RETURNING equipamento_id INTO ID_AUX;
+    
+	RAISE NOTICE 'ID_AUX: %', ID_AUX;
+
+	_equipamento_id := ID_AUX;
 
     UPDATE equipamento
     SET tipo_id = _tipo_equipamento_id
@@ -78,6 +85,8 @@ BEGIN
             VALUES (_componentes[i], _ficha_id);
         END IF;
     END LOOP;
+	
+	RETURN _equipamento_id;
 END;
 $$ LANGUAGE plpgsql;
 
