@@ -53,26 +53,26 @@ BEGIN
             (
                 SELECT json_agg(detalhe_encomenda_fornecedor)
                 FROM (
-					SELECT detalhe_encomenda_fornecedor.*,
-						(
-							SELECT json_agg(componente)
-							FROM (
-								SELECT componente.*,
-									(
-										SELECT json_agg(tipo_componente)
-										FROM tipo_componente
-										WHERE tipo_componente.id = componente.tipo_id
-									) tipo_componente
-								FROM componente
-							) componente
-							WHERE componente.id = detalhe_encomenda_fornecedor.componente_id
-						) componente
-					FROM detalhe_encomenda_fornecedor
-				) detalhe_encomenda_fornecedor
+                    SELECT detalhe_encomenda_fornecedor.*,
+                        (
+                            SELECT readone_componente(detalhe_encomenda_fornecedor.componente_id) AS componente
+                        ) componente
+                    FROM detalhe_encomenda_fornecedor
+                ) detalhe_encomenda_fornecedor
                 WHERE detalhe_encomenda_fornecedor.encomenda_id = encomenda_fornecedor.id
-            ) detalhe_encomenda_fornecedor
+            ) detalhe_encomenda_fornecedor,
+            (
+                SELECT json_agg(estado_encomenda)
+                FROM estado_encomenda
+                WHERE estado_encomenda.id = encomenda_fornecedor.estado_id
+            ) estado_encomenda,
+            (
+                SELECT json_agg(fornecedor)
+                FROM fornecedor
+                WHERE fornecedor.id = encomenda_fornecedor.fornecedor_id
+            ) fornecedor
         FROM encomenda_fornecedor
-	) encomenda_fornecedor
+    ) encomenda_fornecedor
 	WHERE encomenda_fornecedor.id = p_id;
 
     RETURN json;
@@ -95,26 +95,26 @@ BEGIN
             (
                 SELECT json_agg(detalhe_encomenda_fornecedor)
                 FROM (
-					SELECT detalhe_encomenda_fornecedor.*,
-						(
-							SELECT json_agg(componente)
-							FROM (
-								SELECT componente.*,
-									(
-										SELECT json_agg(tipo_componente)
-										FROM tipo_componente
-										WHERE tipo_componente.id = componente.tipo_id
-									) tipo_componente
-								FROM componente
-							) componente
-							WHERE componente.id = detalhe_encomenda_fornecedor.componente_id
-						) componente
-					FROM detalhe_encomenda_fornecedor
-				) detalhe_encomenda_fornecedor
+                    SELECT detalhe_encomenda_fornecedor.*,
+                        (
+                            SELECT readone_componente(detalhe_encomenda_fornecedor.componente_id) AS componente
+                        ) componente
+                    FROM detalhe_encomenda_fornecedor
+                ) detalhe_encomenda_fornecedor
                 WHERE detalhe_encomenda_fornecedor.encomenda_id = encomenda_fornecedor.id
-            ) detalhe_encomenda_fornecedor
+            ) detalhe_encomenda_fornecedor,
+            (
+                SELECT json_agg(estado_encomenda)
+                FROM estado_encomenda
+                WHERE estado_encomenda.id = encomenda_fornecedor.estado_id
+            ) estado_encomenda,
+            (
+                SELECT json_agg(fornecedor)
+                FROM fornecedor
+                WHERE fornecedor.id = encomenda_fornecedor.fornecedor_id
+            ) fornecedor
         FROM encomenda_fornecedor
-	) encomenda_fornecedor;
+    ) encomenda_fornecedor;
 
     RETURN json;
 END;

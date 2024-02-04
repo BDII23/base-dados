@@ -75,7 +75,17 @@ BEGIN
 					FROM detalhe_encomenda_cliente
 				) detalhe_encomenda_cliente
                 WHERE detalhe_encomenda_cliente.encomenda_id = encomenda_cliente.id
-            ) detalhe_encomenda_cliente
+            ) detalhe_encomenda_cliente,
+			(
+				SELECT json_agg(estado_encomenda)
+                FROM estado_encomenda
+                WHERE estado_encomenda.id = encomenda_cliente.estado_id
+			) estado_encomenda,
+			(
+				SELECT json_agg(cliente)
+                FROM cliente
+                WHERE cliente.id = encomenda_cliente.cliente_id
+			) cliente
         FROM encomenda_cliente
 	) encomenda_cliente
 	WHERE encomenda_cliente.id = p_id;
@@ -117,7 +127,17 @@ BEGIN
 					FROM detalhe_encomenda_cliente
 				) detalhe_encomenda_cliente
                 WHERE detalhe_encomenda_cliente.encomenda_id = encomenda_cliente.id
-            ) detalhe_encomenda_cliente
+            ) detalhe_encomenda_cliente,
+			(
+				SELECT json_agg(estado_encomenda)
+                FROM estado_encomenda
+                WHERE estado_encomenda.id = encomenda_cliente.estado_id
+			) estado_encomenda,
+			(
+				SELECT json_agg(cliente)
+                FROM cliente
+                WHERE cliente.id = encomenda_cliente.cliente_id
+			) cliente
         FROM encomenda_cliente
 	) encomenda_cliente;
 
