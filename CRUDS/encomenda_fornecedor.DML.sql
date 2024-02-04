@@ -47,8 +47,33 @@ DECLARE
 BEGIN
     SELECT json_agg(encomenda_fornecedor)
     INTO json
-    FROM encomenda_fornecedor
-	WHERE p_id = encomenda_fornecedor.id;
+    FROM (
+        SELECT
+            encomenda_fornecedor.*,
+            (
+                SELECT json_agg(detalhe_encomenda_fornecedor)
+                FROM (
+					SELECT detalhe_encomenda_fornecedor.*,
+						(
+							SELECT json_agg(componente)
+							FROM (
+								SELECT componente.*,
+									(
+										SELECT json_agg(tipo_componente)
+										FROM tipo_componente
+										WHERE tipo_componente.id = componente.tipo_id
+									) tipo_componente
+								FROM componente
+							) componente
+							WHERE componente.id = detalhe_encomenda_fornecedor.componente_id
+						) componente
+					FROM detalhe_encomenda_fornecedor
+				) detalhe_encomenda_fornecedor
+                WHERE detalhe_encomenda_fornecedor.encomenda_id = encomenda_fornecedor.id
+            ) detalhe_encomenda_fornecedor
+        FROM encomenda_fornecedor
+	) encomenda_fornecedor
+	WHERE encomenda_fornecedor.id = p_id;
 
     RETURN json;
 END;
@@ -62,9 +87,34 @@ AS $$
 DECLARE
     json JSON;
 BEGIN
-    SELECT array_to_json(array_agg(row_to_json(row)))
+    SELECT json_agg(encomenda_fornecedor)
     INTO json
-    FROM (SELECT * FROM encomenda_fornecedor) row;
+    FROM (
+        SELECT
+            encomenda_fornecedor.*,
+            (
+                SELECT json_agg(detalhe_encomenda_fornecedor)
+                FROM (
+					SELECT detalhe_encomenda_fornecedor.*,
+						(
+							SELECT json_agg(componente)
+							FROM (
+								SELECT componente.*,
+									(
+										SELECT json_agg(tipo_componente)
+										FROM tipo_componente
+										WHERE tipo_componente.id = componente.tipo_id
+									) tipo_componente
+								FROM componente
+							) componente
+							WHERE componente.id = detalhe_encomenda_fornecedor.componente_id
+						) componente
+					FROM detalhe_encomenda_fornecedor
+				) detalhe_encomenda_fornecedor
+                WHERE detalhe_encomenda_fornecedor.encomenda_id = encomenda_fornecedor.id
+            ) detalhe_encomenda_fornecedor
+        FROM encomenda_fornecedor
+	) encomenda_fornecedor;
 
     RETURN json;
 END;

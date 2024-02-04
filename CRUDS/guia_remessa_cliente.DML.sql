@@ -75,8 +75,29 @@ DECLARE
 BEGIN
     SELECT json_agg(guia_remessa_cliente)
     INTO json
-    FROM guia_remessa_cliente
-	WHERE p_id = guia_remessa_cliente.id;
+    FROM (
+        SELECT
+            guia_remessa_cliente.*,
+            (
+                SELECT json_agg(detalhe_remessa_cliente)
+                FROM (
+					SELECT detalhe_remessa_cliente.*,
+						(
+							SELECT json_agg(detalhe_encomenda_cliente)
+							FROM (
+								SELECT detalhe_encomenda_cliente.*,
+									readone_equipamento(detalhe_encomenda_cliente.equipamento_id) AS equipamento
+								FROM detalhe_encomenda_cliente
+							) detalhe_encomenda_cliente
+							WHERE detalhe_encomenda_cliente.id = detalhe_remessa_cliente.detalhe_encomenda_id
+						) detalhe_encomenda_cliente
+					FROM detalhe_remessa_cliente
+				) detalhe_remessa_cliente
+                WHERE detalhe_remessa_cliente.remessa_id = guia_remessa_cliente.id
+            ) detalhe_remessa_cliente
+        FROM guia_remessa_cliente
+	) guia_remessa_cliente
+	WHERE guia_remessa_cliente.id = p_id;
 
     RETURN json;
 END;
@@ -90,9 +111,30 @@ AS $$
 DECLARE
     json JSON;
 BEGIN
-    SELECT array_to_json(array_agg(row_to_json(row)))
+    SELECT json_agg(guia_remessa_cliente)
     INTO json
-    FROM (SELECT * FROM guia_remessa_cliente) row;
+    FROM (
+        SELECT
+            guia_remessa_cliente.*,
+            (
+                SELECT json_agg(detalhe_remessa_cliente)
+                FROM (
+					SELECT detalhe_remessa_cliente.*,
+						(
+							SELECT json_agg(detalhe_encomenda_cliente)
+							FROM (
+								SELECT detalhe_encomenda_cliente.*,
+									readone_equipamento(detalhe_encomenda_cliente.equipamento_id) AS equipamento
+								FROM detalhe_encomenda_cliente
+							) detalhe_encomenda_cliente
+							WHERE detalhe_encomenda_cliente.id = detalhe_remessa_cliente.detalhe_encomenda_id
+						) detalhe_encomenda_cliente
+					FROM detalhe_remessa_cliente
+				) detalhe_remessa_cliente
+                WHERE detalhe_remessa_cliente.remessa_id = guia_remessa_cliente.id
+            ) detalhe_remessa_cliente
+        FROM guia_remessa_cliente
+	) guia_remessa_cliente;
 
     RETURN json;
 END;

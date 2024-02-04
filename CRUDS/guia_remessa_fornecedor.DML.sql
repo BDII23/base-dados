@@ -76,10 +76,31 @@ AS $$
 DECLARE
     json JSON;
 BEGIN
-    SELECT json_agg(guia_remessa_fornecedor)
+	SELECT json_agg(guia_remessa_fornecedor)
     INTO json
-    FROM guia_remessa_fornecedor
-	WHERE p_id = guia_remessa_fornecedor.id;
+    FROM (
+        SELECT
+            guia_remessa_fornecedor.*,
+            (
+                SELECT json_agg(detalhe_remessa_fornecedor)
+                FROM (
+					SELECT detalhe_remessa_fornecedor.*,
+						(
+							SELECT json_agg(detalhe_encomenda_fornecedor)
+							FROM (
+								SELECT detalhe_encomenda_fornecedor.*,
+									readone_componente(detalhe_encomenda_fornecedor.componente_id) AS componente
+								FROM detalhe_encomenda_fornecedor
+							) detalhe_encomenda_fornecedor
+							WHERE detalhe_encomenda_fornecedor.id = detalhe_remessa_fornecedor.detalhe_encomenda_id
+						) detalhe_encomenda_fornecedor
+					FROM detalhe_remessa_fornecedor
+				) detalhe_remessa_fornecedor
+                WHERE detalhe_remessa_fornecedor.remessa_id = guia_remessa_fornecedor.id
+            ) detalhe_remessa_fornecedor
+        FROM guia_remessa_fornecedor
+	) guia_remessa_fornecedor
+	WHERE guia_remessa_fornecedor.id = p_id;
 
     RETURN json;
 END;
@@ -93,9 +114,30 @@ AS $$
 DECLARE
     json JSON;
 BEGIN
-    SELECT array_to_json(array_agg(row_to_json(row)))
+	SELECT json_agg(guia_remessa_fornecedor)
     INTO json
-    FROM (SELECT * FROM guia_remessa_fornecedor) row;
+    FROM (
+        SELECT
+            guia_remessa_fornecedor.*,
+            (
+                SELECT json_agg(detalhe_remessa_fornecedor)
+                FROM (
+					SELECT detalhe_remessa_fornecedor.*,
+						(
+							SELECT json_agg(detalhe_encomenda_fornecedor)
+							FROM (
+								SELECT detalhe_encomenda_fornecedor.*,
+									readone_componente(detalhe_encomenda_fornecedor.componente_id) AS componente
+								FROM detalhe_encomenda_fornecedor
+							) detalhe_encomenda_fornecedor
+							WHERE detalhe_encomenda_fornecedor.id = detalhe_remessa_fornecedor.detalhe_encomenda_id
+						) detalhe_encomenda_fornecedor
+					FROM detalhe_remessa_fornecedor
+				) detalhe_remessa_fornecedor
+                WHERE detalhe_remessa_fornecedor.remessa_id = guia_remessa_fornecedor.id
+            ) detalhe_remessa_fornecedor
+        FROM guia_remessa_fornecedor
+	) guia_remessa_fornecedor;
 
     RETURN json;
 END;
