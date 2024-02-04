@@ -94,7 +94,12 @@ BEGIN
 					FROM detalhe_remessa_cliente
 				) detalhe_remessa_cliente
                 WHERE detalhe_remessa_cliente.remessa_id = guia_remessa_cliente.id
-            ) detalhe_remessa_cliente
+            ) detalhe_remessa_cliente,
+			(
+				SELECT json_agg(fatura_cliente)
+                FROM fatura_cliente
+                WHERE fatura_cliente.id = guia_remessa_cliente.fatura_id
+			) fatura_cliente
         FROM guia_remessa_cliente
 	) guia_remessa_cliente
 	WHERE guia_remessa_cliente.id = p_id;
@@ -132,7 +137,12 @@ BEGIN
 					FROM detalhe_remessa_cliente
 				) detalhe_remessa_cliente
                 WHERE detalhe_remessa_cliente.remessa_id = guia_remessa_cliente.id
-            ) detalhe_remessa_cliente
+            ) detalhe_remessa_cliente,
+			(
+				SELECT json_agg(fatura_cliente)
+                FROM fatura_cliente
+                WHERE fatura_cliente.id = guia_remessa_cliente.fatura_id
+			) fatura_cliente
         FROM guia_remessa_cliente
 	) guia_remessa_cliente;
 

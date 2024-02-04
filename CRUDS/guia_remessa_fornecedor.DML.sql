@@ -97,7 +97,12 @@ BEGIN
 					FROM detalhe_remessa_fornecedor
 				) detalhe_remessa_fornecedor
                 WHERE detalhe_remessa_fornecedor.remessa_id = guia_remessa_fornecedor.id
-            ) detalhe_remessa_fornecedor
+            ) detalhe_remessa_fornecedor,
+			(
+				SELECT json_agg(fatura_fornecedor)
+                FROM fatura_fornecedor
+                WHERE fatura_fornecedor.id = guia_remessa_fornecedor.fatura_id
+			) fatura_fornecedor
         FROM guia_remessa_fornecedor
 	) guia_remessa_fornecedor
 	WHERE guia_remessa_fornecedor.id = p_id;
@@ -135,7 +140,12 @@ BEGIN
 					FROM detalhe_remessa_fornecedor
 				) detalhe_remessa_fornecedor
                 WHERE detalhe_remessa_fornecedor.remessa_id = guia_remessa_fornecedor.id
-            ) detalhe_remessa_fornecedor
+            ) detalhe_remessa_fornecedor,
+			(
+				SELECT json_agg(fatura_fornecedor)
+                FROM fatura_fornecedor
+                WHERE fatura_fornecedor.id = guia_remessa_fornecedor.fatura_id
+			) fatura_fornecedor
         FROM guia_remessa_fornecedor
 	) guia_remessa_fornecedor;
 
