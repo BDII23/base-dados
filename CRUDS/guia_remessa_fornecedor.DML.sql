@@ -152,3 +152,22 @@ BEGIN
     RETURN json;
 END;
 $$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION custo_total_guia_remessa_fornecedor(p_id INT)
+RETURNS MONEY
+AS $$
+DECLARE
+    custo_total MONEY;
+BEGIN
+    SELECT 
+    	SUM(def.quantidade * def.custo_entidade) INTO custo_total
+	FROM guia_remessa_fornecedor grf
+	JOIN detalhe_remessa_fornecedor drf ON drf.remessa_id = grf.id
+	JOIN detalhe_encomenda_fornecedor def ON def.id = drf.detalhe_encomenda_id
+	WHERE grf.id = p_id;
+
+    RETURN custo_total;
+END;
+$$ LANGUAGE plpgsql;

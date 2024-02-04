@@ -221,8 +221,6 @@ CREATE TABLE detalhe_remessa_cliente(
 	id											SERIAL				NOT NULL,
 	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
 
-	quantidade									INT					NOT NULL	DEFAULT (1),
-
 	detalhe_encomenda_id						INT					NOT NULL,
 	remessa_id									INT					NOT NULL,
 	
@@ -301,8 +299,6 @@ CREATE TABLE guia_remessa_fornecedor(
 CREATE TABLE detalhe_remessa_fornecedor(
 	id											SERIAL				NOT NULL,
 	data_criacao								TIMESTAMP			NOT NULL	DEFAULT NOW(),
-
-	quantidade									INT					NOT NULL	DEFAULT (1),
 
 	detalhe_encomenda_id						INT					NOT NULL,
 	remessa_id									INT					NOT NULL,
