@@ -20,7 +20,7 @@ CREATE OR REPLACE FUNCTION update_stock_fornecedor()
 RETURNS TRIGGER AS $$
 BEGIN
     UPDATE componente
-    SET quantidade = componente.quantidade + NEW.quantidade
+    SET quantidade = componente.quantidade + detalhe_encomenda_fornecedor.quantidade
     FROM detalhe_encomenda_fornecedor
     WHERE componente.id = detalhe_encomenda_fornecedor.componente_id
       AND detalhe_encomenda_fornecedor.id = NEW.detalhe_encomenda_id;
@@ -58,7 +58,7 @@ CREATE OR REPLACE FUNCTION update_stock_cliente()
 RETURNS TRIGGER AS $$
 BEGIN
     UPDATE equipamento
-    SET quantidade = equipamento.quantidade - NEW.quantidade
+    SET quantidade = equipamento.quantidade - detalhe_encomenda_cliente.quantidade
     FROM detalhe_encomenda_cliente
     WHERE equipamento.id = detalhe_encomenda_cliente.equipamento_id
       AND detalhe_encomenda_cliente.id = NEW.detalhe_encomenda_id;

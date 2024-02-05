@@ -63,7 +63,7 @@ BEGIN
 
     RETURN json;
 END;
-$$ LANGUAGE plpgsql
+$$ LANGUAGE plpgsql;
 
 
 
