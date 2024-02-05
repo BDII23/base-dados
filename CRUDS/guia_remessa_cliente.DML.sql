@@ -63,13 +63,16 @@ CREATE OR REPLACE PROCEDURE update_guia_remessa_cliente(
     p_id INT,
     p_data_envio TIMESTAMP,
     p_data_entrega TIMESTAMP,
-    p_endereco_origem VARCHAR(300),
-    p_endereco_chegada VARCHAR(300),
-    p_estado_id INT,
-    p_detalhe_encomenda_id INT,
-    p_utilizador_id INT
+    p_endereco_origem VARCHAR,
+    p_endereco_chegada VARCHAR,
+    p_utilizador_id INT,
+    p_fatura_descricao TEXT,
+    p_detalhe_encomendas INT[]
 )
 AS $$
+DECLARE
+	aux_fatura_id INT;
+	it INT;
 BEGIN
     UPDATE guia_remessa_cliente
     SET
@@ -77,10 +80,36 @@ BEGIN
         data_entrega = p_data_entrega,
         endereco_origem = p_endereco_origem,
         endereco_chegada = p_endereco_chegada,
-        estado_id = p_estado_id,
-        detalhe_encomenda_id = p_detalhe_encomenda_id,
         utilizador_id = p_utilizador_id
-    WHERE id = p_id;
+    WHERE id = p_id
+	RETURNING fatura_id INTO aux_fatura_id;
+	
+	UPDATE fatura_cliente
+	SET
+		descricao = p_fatura_descricao
+	WHERE id = aux_fatura_id;
+	
+	FOR it IN (
+		SELECT detalhe_encomenda_id 
+		FROM detalhe_remessa_cliente 
+		WHERE remessa_id = p_id
+	) LOOP
+        IF it NOT IN (SELECT UNNEST(p_detalhe_encomendas)) THEN
+            DELETE FROM detalhe_remessa_cliente WHERE remessa_id = p_id AND detalhe_encomenda_id = it;
+        END IF;
+    END LOOP;
+
+    FOR i IN 1..array_length(p_detalhe_encomendas, 1) LOOP
+        SELECT detalhe_encomenda_id INTO it
+        FROM detalhe_remessa_cliente
+        WHERE detalhe_encomenda_id = p_detalhe_encomendas[i] AND remessa_id = p_id;
+	
+        IF it IS NULL THEN
+            INSERT INTO detalhe_remessa_cliente (detalhe_encomenda_id, remessa_id)
+            VALUES (p_detalhe_encomendas[i], p_id);
+        END IF;
+    END LOOP;
+	
 END;
 $$ LANGUAGE plpgsql;
 
