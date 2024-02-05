@@ -9,36 +9,62 @@ $$;
 
 
 CREATE OR REPLACE PROCEDURE create_encomenda_cliente(
-    p_data_criacao TIMESTAMP,
-    p_estado_id INT,
-    p_cliente_id INT,
-    p_fatura_id INT
+    in_equipamentos INT[],
+    in_cliente_id INT
 )
 AS $$
+DECLARE
+    ID_AUX INT;
+    i INT;
 BEGIN
-    INSERT INTO encomenda_cliente (data_criacao, estado_id, cliente_id, fatura_id)
-    VALUES (p_data_criacao, p_estado_id, p_cliente_id, p_fatura_id);
+    INSERT INTO encomenda_cliente (cliente_id, estado_id)
+    VALUES (in_cliente_id, 1)
+    RETURNING id INTO ID_AUX;
+
+    FOR i IN 1..array_length(in_equipamentos, 1) LOOP
+        INSERT INTO detalhe_encomenda_cliente (quantidade, custo_unidade, equipamento_id, encomenda_id)
+        VALUES (floor(random() * 10), (floor(random() * 100)::numeric::money), in_equipamentos[i], ID_AUX);
+    END LOOP;
 END;
 $$ LANGUAGE plpgsql;
 
 
 
 CREATE OR REPLACE PROCEDURE update_encomenda_cliente(
-    p_id INT,
-    p_data_criacao TIMESTAMP,
-    p_estado_id INT,
-    p_cliente_id INT,
-    p_fatura_id INT)
+    in_id INT,
+    in_equipamentos INT[],
+    in_cliente_id INT
+)
 AS $$
+DECLARE
+    ID_AUX INT;
 BEGIN
     UPDATE encomenda_cliente
-    SET 
-        data_criacao = p_data_criacao,
-        estado_id = p_estado_id,
-        estado_algumacoisa_id = p_estado_id,
-        cliente_id = p_cliente_id,
-        fatura_id = p_fatura_id
-    WHERE id = p_id;
+    SET
+        cliente_id = in_cliente_id
+    WHERE id = in_id;
+
+	FOR ID_AUX IN (
+		SELECT equipamento_id 
+		FROM detalhe_encomenda_cliente 
+		WHERE encomenda_id = in_id
+	) LOOP
+        IF ID_AUX NOT IN (SELECT UNNEST(in_equipamentos)) THEN
+            DELETE FROM detalhe_encomenda_cliente WHERE encomenda_id = in_id AND equipamento_id = ID_AUX;
+        END IF;
+    END LOOP;
+
+    FOR i IN 1..array_length(in_equipamentos, 1) LOOP
+        SELECT equipamento_id INTO ID_AUX
+        FROM detalhe_encomenda_cliente
+        WHERE equipamento_id = in_equipamentos[i] AND encomenda_id = in_id;
+	
+        IF ID_AUX IS NULL THEN
+            INSERT INTO detalhe_encomenda_cliente (quantidade, custo_unidade, equipamento_id, encomenda_id)
+            VALUES (floor(random() * 10), (floor(random() * 100)::numeric::money), in_equipamentos[i], in_id);
+        END IF;
+    END LOOP;
+	
 END;
 $$ LANGUAGE plpgsql;
 

@@ -10,30 +10,63 @@ $$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE PROCEDURE create_encomenda_fornecedor(
-    in_estado_id INT,
+    in_componentes INT[],
     in_fornecedor_id INT
 )
 AS $$
+DECLARE
+    ID_AUX INT;
+    i INT;
 BEGIN
-    INSERT INTO encomenda_fornecedor (estado_id, fornecedor_id, fatura_id)
-    VALUES (in_estado_id, in_fornecedor_id, in_fatura_id);
+    INSERT INTO encomenda_fornecedor (fornecedor_id, estado_id)
+    VALUES (in_fornecedor_id, 1)
+    RETURNING id INTO ID_AUX;
+
+    FOR i IN 1..array_length(in_componentes, 1) LOOP
+        INSERT INTO detalhe_encomenda_fornecedor (quantidade, custo_entidade, componente_id, encomenda_id)
+        VALUES (floor(random() * 10), (floor(random() * 100)::numeric::money), in_componentes[i], ID_AUX);
+    END LOOP;
 END;
 $$ LANGUAGE plpgsql;
 
 
 
+
 CREATE OR REPLACE PROCEDURE update_encomenda_fornecedor(
     in_id INT,
-    in_estado_id INT,
+    in_componentes INT[],
     in_fornecedor_id INT
 )
 AS $$
+DECLARE
+    ID_AUX INT;
 BEGIN
     UPDATE encomenda_fornecedor
-    SET estado_id = in_estado_id,
-        fornecedor_id = in_fornecedor_id,
-        fatura_id = in_fatura_id
+    SET
+        fornecedor_id = in_fornecedor_id
     WHERE id = in_id;
+
+	FOR ID_AUX IN (
+		SELECT componente_id 
+		FROM detalhe_encomenda_fornecedor 
+		WHERE encomenda_id = in_id
+	) LOOP
+        IF ID_AUX NOT IN (SELECT UNNEST(in_componentes)) THEN
+            DELETE FROM detalhe_encomenda_fornecedor WHERE encomenda_id = in_id AND componente_id = ID_AUX;
+        END IF;
+    END LOOP;
+
+    FOR i IN 1..array_length(in_componentes, 1) LOOP
+        SELECT componente_id INTO ID_AUX
+        FROM detalhe_encomenda_fornecedor
+        WHERE componente_id = in_componentes[i] AND encomenda_id = in_id;
+	
+        IF ID_AUX IS NULL THEN
+            INSERT INTO detalhe_encomenda_fornecedor (quantidade, custo_entidade, componente_id, encomenda_id)
+            VALUES (floor(random() * 10), (floor(random() * 100)::numeric::money), in_componentes[i], in_id);
+        END IF;
+    END LOOP;
+	
 END;
 $$ LANGUAGE plpgsql;
 
