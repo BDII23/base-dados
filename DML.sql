@@ -107,16 +107,16 @@ INSERT INTO detalhe_encomenda_cliente (quantidade, custo_unidade, equipamento_id
   (20, 15.50, 3, 3);
 
 -- Guia_Remessa_Cliente
-INSERT INTO guia_remessa_cliente (data_envio, data_entrega, endereco_origem, endereco_chegada, estado_id, detalhe_encomenda_id, utilizador_id, fatura_id) VALUES
-  ('2024-01-10', '2024-01-15', 'Armazém A', 'Endereço Cliente 1', 1, 2, 1),
-  ('2024-01-12', '2024-01-18', 'Armazém B', 'Endereço Cliente 2', 2, 3, 2),
-  ('2024-01-15', '2024-01-20', 'Armazém C', 'Endereço Cliente 3', 3, 1, 3);
+INSERT INTO guia_remessa_cliente (data_envio, data_entrega, endereco_origem, endereco_chegada, utilizador_id, fatura_id) VALUES
+  ('2024-01-10', '2024-01-15', 'Armazém A', 'Endereço Cliente 1', 2, 1),
+  ('2024-01-12', '2024-01-18', 'Armazém B', 'Endereço Cliente 2', 3, 2),
+  ('2024-01-15', '2024-01-20', 'Armazém C', 'Endereço Cliente 3', 1, 3);
 
 -- Detalhe_Remessa_Cliente
-INSERT INTO detalhe_remessa_cliente (quantidade, detalhe_encomenda_id, remessa_id) VALUES
-  (10, 1, 1),
-  (5, 2, 2),
-  (20, 3, 3);
+INSERT INTO detalhe_remessa_cliente (detalhe_encomenda_id, remessa_id) VALUES
+  (1, 1),
+  (2, 2),
+  (3, 3);
 
 -- Fatura_Fornecedor
 INSERT INTO fatura_fornecedor (descricao) VALUES
@@ -143,19 +143,13 @@ INSERT INTO detalhe_encomenda_fornecedor (quantidade, custo_entidade, componente
   (20, 15.50, 3, 3);
 
 -- Guia_Remessa_Fornecedor
-INSERT INTO guia_remessa_fornecedor (data_envio, data_entrega, endereco_origem, endereco_chegada, estado_id, detalhe_encomenda_id, utilizador_id, fatura_id) VALUES
-  ('2024-01-10', '2024-01-15', 'Armazém Fornecedor 1', 'Endereço Fornecedor 1', 1, 2, 1),
-  ('2024-01-12', '2024-01-18', 'Armazém Fornecedor 2', 'Endereço Fornecedor 2', 2, 3, 2),
-  ('2024-01-15', '2024-01-20', 'Armazém Fornecedor 3', 'Endereço Fornecedor 3', 3, 1, 3);
+INSERT INTO guia_remessa_fornecedor (data_envio, data_entrega, endereco_origem, endereco_chegada, utilizador_id, fatura_id) VALUES
+  ('2024-01-10', '2024-01-15', 'Armazém Fornecedor 1', 'Endereço Fornecedor 1', 2, 1),
+  ('2024-01-12', '2024-01-18', 'Armazém Fornecedor 2', 'Endereço Fornecedor 2', 3, 2),
+  ('2024-01-15', '2024-01-20', 'Armazém Fornecedor 3', 'Endereço Fornecedor 3', 1, 3);
 
 -- Detalhe_Remessa_Fornecedor
-INSERT INTO detalhe_remessa_fornecedor (quantidade, detalhe_encomenda_id, remessa_id) VALUES
-  (10, 1, 1),
-  (5, 2, 2),
-  (20, 3, 3);
-
--- Detalhe_Remessa_Fornecedor (continuação)
-INSERT INTO detalhe_remessa_fornecedor (quantidade, detalhe_encomenda_id, remessa_id) VALUES
-  (10, 1, 1),
-  (5, 2, 2),
-  (20, 3, 3);
+INSERT INTO detalhe_remessa_fornecedor (detalhe_encomenda_id, remessa_id) VALUES
+  (1, 1),
+  (2, 2),
+  (3, 3);
