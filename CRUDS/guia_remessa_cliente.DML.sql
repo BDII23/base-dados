@@ -1,33 +1,61 @@
+CREATE OR REPLACE FUNCTION readjson_guia_remessa_clientes_componentes()
+RETURNS JSON
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    resultado_json JSON;
+BEGIN
+    SELECT jsonb_agg(
+        jsonb_build_object(
+            'detalhe_id', dec.id,
+            'equipamento_id', e.id,
+            'tipo_equipamento', te.tipo,
+            'encomenda_id', ec.id
+        )
+    ) INTO resultado_json
+    FROM detalhe_encomenda_cliente dec
+    JOIN equipamento e
+        ON e.id = dec.equipamento_id
+	JOIN tipo_equipamento te
+		ON te.id = e.tipo_id
+    JOIN encomenda_cliente ec
+        ON ec.id = dec.encomenda_id;
+
+    RETURN resultado_json;
+END;
+$$;
+
+
+
 CREATE OR REPLACE PROCEDURE create_guia_remessa_cliente(
     p_data_envio TIMESTAMP,
     p_data_entrega TIMESTAMP,
-    p_endereco_origem VARCHAR(300),
-    p_endereco_chegada VARCHAR(300),
-    p_estado_id INT,
-    p_detalhe_encomenda_id INT,
-    p_utilizador_id INT
+    p_endereco_origem VARCHAR,
+    p_endereco_chegada VARCHAR,
+    p_utilizador_id INT,
+    p_fatura_descricao TEXT,
+    p_detalhe_encomendas INT[]
 )
+LANGUAGE plpgsql
 AS $$
+DECLARE
+    aux_fatura_id INT;
+    aux_remessa_id INT;
 BEGIN
-    INSERT INTO guia_remessa_cliente (
-        data_envio,
-        data_entrega,
-        endereco_origem,
-        endereco_chegada,
-        estado_id,
-        detalhe_encomenda_id,
-        utilizador_id
-    ) VALUES (
-        p_data_envio,
-        p_data_entrega,
-        p_endereco_origem,
-        p_endereco_chegada,
-        p_estado_id,
-        p_detalhe_encomenda_id,
-        p_utilizador_id
-    );
+    INSERT INTO fatura_cliente(descricao)
+    VALUES (p_fatura_descricao)
+    RETURNING id INTO aux_fatura_id;
+
+    INSERT INTO guia_remessa_cliente (data_envio, data_entrega, endereco_origem, endereco_chegada, utilizador_id, fatura_id)
+    VALUES (p_data_envio, p_data_entrega, p_endereco_origem, p_endereco_chegada, p_utilizador_id, aux_fatura_id)
+    RETURNING id INTO aux_remessa_id;
+
+    FOR i IN 1..array_length(p_detalhe_encomendas, 1) LOOP
+        INSERT INTO detalhe_remessa_cliente(detalhe_encomenda_id, remessa_id)
+        VALUES (p_detalhe_encomendas[i], aux_remessa_id);
+    END LOOP;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
 
 

@@ -293,7 +293,7 @@ CREATE TABLE guia_remessa_fornecedor(
 
 	CONSTRAINT pk_guia_remessa_fornecedor PRIMARY KEY (id),
 	CONSTRAINT fk_utilizador__guia_remessa_fornecedor FOREIGN KEY (utilizador_id) REFERENCES utilizador (id),
-	CONSTRAINT fk_fatura__encomenda_cliente FOREIGN KEY (fatura_id) REFERENCES fatura_cliente (id)
+	CONSTRAINT fk_fatura__guia_remessa_fornecedor FOREIGN KEY (fatura_id) REFERENCES fatura_fornecedor (id)
 );
 
 CREATE TABLE detalhe_remessa_fornecedor(

@@ -1,32 +1,57 @@
+CREATE OR REPLACE FUNCTION readjson_guia_remessa_fornecedores_componentes()
+RETURNS JSON
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    resultado_json JSON;
+BEGIN
+    SELECT jsonb_agg(
+        jsonb_build_object(
+            'detalhe_id', def.id,
+            'componente_id', c.id,
+            'componente_descricao', c.descricao,
+            'encomenda_id', ef.id
+        )
+    ) INTO resultado_json
+    FROM detalhe_encomenda_fornecedor def
+    JOIN componente c
+        ON c.id = def.componente_id
+    JOIN encomenda_fornecedor ef
+        ON ef.id = def.encomenda_id;
+
+    RETURN resultado_json;
+END;
+$$;
+
+
+
 CREATE OR REPLACE PROCEDURE create_guia_remessa_fornecedor(
-    IN p_data_envio TIMESTAMPTZ,
-    IN p_data_entrega TIMESTAMPTZ,
-    IN p_endereco_origem VARCHAR(300),
-    IN p_endereco_chegada VARCHAR(300),
-    IN p_estado_id INT,
-    IN p_detalhe_encomenda_id INT,
-    IN p_utilizador_id INT
+    p_data_envio TIMESTAMP,
+    p_data_entrega TIMESTAMP,
+    p_endereco_origem VARCHAR,
+    p_endereco_chegada VARCHAR,
+    p_utilizador_id INT,
+    p_fatura_descricao TEXT,
+    p_detalhe_encomendas INT[]
 )
 LANGUAGE plpgsql
 AS $$
-BEGIN   
-    INSERT INTO guia_remessa_fornecedor (
-        data_envio,
-        data_entrega,
-        endereco_origem,
-        endereco_chegada,
-        estado_id,
-        detalhe_encomenda_id,
-        utilizador_id
-    ) VALUES (
-        p_data_envio,
-        p_data_entrega,
-        p_endereco_origem,
-        p_endereco_chegada,
-        p_estado_id,
-        p_detalhe_encomenda_id,
-        p_utilizador_id
-    );
+DECLARE
+    aux_fatura_id INT;
+    aux_remessa_id INT;
+BEGIN
+    INSERT INTO fatura_fornecedor(descricao)
+    VALUES (p_fatura_descricao)
+    RETURNING id INTO aux_fatura_id;
+
+    INSERT INTO guia_remessa_fornecedor (data_envio, data_entrega, endereco_origem, endereco_chegada, utilizador_id, fatura_id)
+    VALUES (p_data_envio, p_data_entrega, p_endereco_origem, p_endereco_chegada, p_utilizador_id, aux_fatura_id)
+    RETURNING id INTO aux_remessa_id;
+
+    FOR i IN 1..array_length(p_detalhe_encomendas, 1) LOOP
+        INSERT INTO detalhe_remessa_fornecedor(detalhe_encomenda_id, remessa_id)
+        VALUES (p_detalhe_encomendas[i], aux_remessa_id);
+    END LOOP;
 END;
 $$;
 
