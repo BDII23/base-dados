@@ -1,3 +1,73 @@
+CREATE OR REPLACE PROCEDURE importar_encomenda_cliente(
+    in_dados_encomendas JSONB
+)
+AS $$
+DECLARE
+    ID_AUX INT;
+    converter INT;
+    encomenda JSONB;
+    equipamento JSONB;
+BEGIN
+    FOR encomenda IN SELECT * FROM jsonb_array_elements(in_dados_encomendas)
+    LOOP
+        converter := (encomenda ->> 'cliente_id')::INT;
+
+        INSERT INTO encomenda_cliente (cliente_id, estado_id)
+        VALUES (converter, 1)
+        RETURNING id INTO ID_AUX;
+
+        FOR equipamento IN SELECT * FROM jsonb_array_elements(encomenda->'equipamento')
+        LOOP
+            converter := (equipamento ->> 'equipamento_id')::INT;
+
+            INSERT INTO detalhe_encomenda_cliente (quantidade, custo_unidade, equipamento_id, encomenda_id)
+            VALUES (floor(random() * 10), (floor(random() * 100)::numeric::money), converter, ID_AUX);
+        END LOOP;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+CREATE OR REPLACE FUNCTION exportar_encomenda_cliente()
+RETURNS JSON
+AS $$
+DECLARE
+    json JSON;
+BEGIN
+    SELECT json_agg(encomenda_simplificada)
+    INTO json
+    FROM (
+        SELECT
+            encomenda_cliente.id,
+            encomenda_cliente.data_criacao,
+            encomenda_cliente.estado_id,
+            encomenda_cliente.cliente_id,
+            (
+                SELECT json_agg(equipamento)
+                FROM (
+                    SELECT
+                        equipamento.id AS equipamento_id,
+                        equipamento.data_criacao AS equipamento_data_criacao,
+                        equipamento.tipo_id AS equipamento_tipo_id,
+                        equipamento.quantidade AS equipamento_quantidade,
+                        tipo_equipamento.tipo AS equipamento_tipo
+                    FROM equipamento
+                    JOIN tipo_equipamento ON equipamento.tipo_id = tipo_equipamento.id
+                    WHERE equipamento.id = detalhe_encomenda_cliente.equipamento_id
+                ) equipamento
+            ) equipamento
+        FROM encomenda_cliente
+        JOIN detalhe_encomenda_cliente ON encomenda_cliente.id = detalhe_encomenda_cliente.encomenda_id
+    ) encomenda_simplificada;
+
+    RETURN json;
+END;
+$$ LANGUAGE plpgsql
+
+
+
+
 CREATE OR REPLACE PROCEDURE delete_encomenda_cliente(p_id INT)
 LANGUAGE plpgsql
 AS $$
